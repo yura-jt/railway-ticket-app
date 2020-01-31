@@ -38,23 +38,22 @@ CREATE TABLE tickets
 
 CREATE TABLE trains
 (
-    id       INT(10)      NOT NULL AUTO_INCREMENT,
-    code     VARCHAR(10)  NOT NULL,
-    name     VARCHAR(100) NOT NULL,
-    route_id INT(10)      NOT NULL,
+    id   INT(10)      NOT NULL AUTO_INCREMENT,
+    code VARCHAR(10)  NOT NULL,
+    name VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE routes
+CREATE TABLE stations
 (
-    id           INT(10)      NOT NULL AUTO_INCREMENT,
-    train_id     INT(10),
-    station      VARCHAR(100) NOT NULL,
-    station_type VARCHAR(20)  NOT NULL,
-    station_time TIME         NOT NULL,
-    distance     INT(10)      NOT NULL,
+    id       INT(10)      NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(100) NOT NULL,
+    type     VARCHAR(20)  NOT NULL,
+    time     TIME         NOT NULL,
+    distance INT(10)      NOT NULL,
+    train_id INT(10),
     PRIMARY KEY (id),
-    CONSTRAINT routes_trains_fk FOREIGN KEY (train_id) REFERENCES trains (id)
+    CONSTRAINT stations_trains_fk FOREIGN KEY (train_id) REFERENCES trains (id)
 );
 
 CREATE TABLE flights

@@ -8,19 +8,19 @@ INSERT INTO tickets(departure_station, destination_station, passenger_name, pric
 VALUES ('Кривий Ріг', 'Одеса', 'Бундуцький Олексій', 599.60, 2, 1, 1, 1, default),
        ('Кривий Ріг', 'Одеса', 'Бундуцька Марія', 599.60, 2, 2, 1, 2, default);
 
-INSERT INTO trains(code, name, route_id)
-VALUES ('43K', 'Подільський експрес', 43),
-       ('122', 'Срібна стріла', 154);
+INSERT INTO trains(code, name)
+VALUES ('43K', 'Подільський експрес'),
+       ('122', 'Срібна стріла');
 
-INSERT INTO routes(train_id, station, station_type, station_time, distance)
-VALUES (1, 'Київ', 'DEPARTURE_STATION', '18:55:00', 0),
-       (1, 'Львів', 'ARRIVING_STATION', '02:34:00', 400),
-       (1, 'Львів', 'DEPARTURE_STATION', '02:59:00', 400),
-       (1, 'Івано-Франківськ', 'ARRIVING_STATION', '05:50:00', 700),
-       (2, 'Київ', 'DEPARTURE_STATION', '09:20:00', 0),
-       (2, 'Кривий Ріг', 'ARRIVING_STATION', '15:30:00', 335),
-       (2, 'Кривий Ріг', 'DEPARTURE_STATION', '15:35:00', 335),
-       (2, 'Одеса', 'ARRIVING_STATION', '19:10:00', 554);
+INSERT INTO routes(station, station_type, station_time, distance, train_id)
+VALUES ('Київ', 'DEPARTURE_STATION', '18:55:00', 0, 1),
+       ('Львів', 'ARRIVING_STATION', '02:34:00', 400, 1),
+       ('Львів', 'DEPARTURE_STATION', '02:59:00', 400, 1),
+       ('Івано-Франківськ', 'ARRIVING_STATION', '05:50:00', 700, 1),
+       ('Київ', 'DEPARTURE_STATION', '09:20:00', 0, 2),
+       ('Кривий Ріг', 'ARRIVING_STATION', '15:30:00', 335, 2),
+       ('Кривий Ріг', 'DEPARTURE_STATION', '15:35:00', 335, 2),
+       ('Одеса', 'ARRIVING_STATION', '19:10:00', 554, 2);
 
 INSERT INTO orders(departure_station, destination_station, departure_date,
                    from_time, to_time, status, user_id)

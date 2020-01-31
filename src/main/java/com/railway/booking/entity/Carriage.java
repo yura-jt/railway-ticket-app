@@ -2,10 +2,13 @@ package com.railway.booking.entity;
 
 import com.railway.booking.entity.enums.CarriageType;
 
+import java.util.Objects;
+
 public class Carriage {
     private final Integer id;
     private final CarriageType type;
     private final Integer number;
+    private final Integer capacity;
     private final Integer flightId;
 
     private Carriage(Builder builder) {
@@ -13,6 +16,7 @@ public class Carriage {
         this.type = builder.type;
         this.number = builder.number;
         this.flightId = builder.flightId;
+        this.capacity = builder.capacity;
     }
 
     public Integer getId() {
@@ -31,14 +35,25 @@ public class Carriage {
         return flightId;
     }
 
+    public Integer getCapacity() {
+        return capacity;
+    }
+
     @Override
-    public String toString() {
-        return "Carriage{" +
-                "id=" + id +
-                ", type=" + type +
-                ", number=" + number +
-                ", flight_id=" + flightId +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Carriage carriage = (Carriage) o;
+        return Objects.equals(id, carriage.id) &&
+                type == carriage.type &&
+                Objects.equals(number, carriage.number) &&
+                Objects.equals(capacity, carriage.capacity) &&
+                Objects.equals(flightId, carriage.flightId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, type, number, capacity, flightId);
     }
 
     public static Builder builder() {
@@ -50,6 +65,7 @@ public class Carriage {
         private CarriageType type;
         private Integer number;
         private Integer flightId;
+        private Integer capacity;
 
         private Builder() {
         }
@@ -71,6 +87,11 @@ public class Carriage {
 
         public Builder withFlightId(Integer flightId) {
             this.flightId = flightId;
+            return this;
+        }
+
+        public Builder withCapacity(Integer capacity) {
+            this.capacity = capacity;
             return this;
         }
 

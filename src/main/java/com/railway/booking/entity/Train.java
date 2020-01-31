@@ -1,25 +1,20 @@
 package com.railway.booking.entity;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Train {
     private final Integer id;
     private final String code;
     private final String name;
-    private final String departureStation;
-    private final String destinationStation;
-    private final LocalDateTime departureTime;
-    private final LocalDateTime arriveTime;
+    private final List<Station> stations;
 
     private Train(Builder builder) {
         this.id = builder.id;
         this.code = builder.code;
         this.name = builder.name;
-        this.departureStation = builder.departureStation;
-        this.destinationStation = builder.destinationStation;
-        this.departureTime = builder.departureTime;
-        this.arriveTime = builder.arriveTime;
+        this.stations = builder.stations;
     }
 
     public Integer getId() {
@@ -34,20 +29,8 @@ public class Train {
         return name;
     }
 
-    public String getDepartureStation() {
-        return departureStation;
-    }
-
-    public String getDestinationStation() {
-        return destinationStation;
-    }
-
-    public LocalDateTime getDepartureTime() {
-        return departureTime;
-    }
-
-    public LocalDateTime getArriveTime() {
-        return arriveTime;
+    public List<Station> getStations() {
+        return stations;
     }
 
     @Override
@@ -58,15 +41,12 @@ public class Train {
         return Objects.equals(id, train.id) &&
                 Objects.equals(code, train.code) &&
                 Objects.equals(name, train.name) &&
-                Objects.equals(departureStation, train.departureStation) &&
-                Objects.equals(destinationStation, train.destinationStation) &&
-                Objects.equals(departureTime, train.departureTime) &&
-                Objects.equals(arriveTime, train.arriveTime);
+                Objects.equals(stations, train.stations);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, code, name, departureStation, destinationStation, departureTime, arriveTime);
+        return Objects.hash(id, code, name, stations);
     }
 
     @Override
@@ -75,10 +55,9 @@ public class Train {
                 "id=" + id +
                 ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
-                ", departureStation='" + departureStation + '\'' +
-                ", destinationStation='" + destinationStation + '\'' +
-                ", departureTime=" + departureTime +
-                ", arriveTime=" + arriveTime +
+                ", stations=" + stations.stream()
+                .map(Objects::toString)
+                .collect(Collectors.joining(",\n")) +
                 '}';
     }
 
@@ -90,10 +69,7 @@ public class Train {
         private Integer id;
         private String code;
         private String name;
-        private String departureStation;
-        private String destinationStation;
-        private LocalDateTime departureTime;
-        private LocalDateTime arriveTime;
+        private List<Station> stations;
 
         private Builder() {
         }
@@ -113,23 +89,8 @@ public class Train {
             return this;
         }
 
-        public Builder withDepartureStation(String departureStation) {
-            this.departureStation = departureStation;
-            return this;
-        }
-
-        public Builder withDestinationStation(String destinationStation) {
-            this.destinationStation = destinationStation;
-            return this;
-        }
-
-        public Builder withDepartureTime(LocalDateTime departureTime) {
-            this.departureTime = departureTime;
-            return this;
-        }
-
-        public Builder withArriveTime(LocalDateTime arriveTime) {
-            this.arriveTime = arriveTime;
+        public Builder withStations(List<Station> stations) {
+            this.stations = stations;
             return this;
         }
 
