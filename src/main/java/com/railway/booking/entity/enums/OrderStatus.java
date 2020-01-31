@@ -1,5 +1,5 @@
 package com.railway.booking.entity.enums;
 
 public enum OrderStatus {
-    ACCEPTED, PENDING, REJECTED, PAID
+    ACCEPTED, WAITING_FOR_PAYMENT, REJECTED, DONE
 }
