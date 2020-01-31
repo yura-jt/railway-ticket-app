@@ -4,12 +4,14 @@ import com.railway.booking.entity.enums.SeatStatus;
 
 public class Seat {
     private final Integer id;
+    private final Integer number;
     private final Integer carriageId;
     private final Integer ticketId;
     private final SeatStatus status;
 
     private Seat(Builder builder) {
         this.id = builder.id;
+        this.number = builder.number;
         this.carriageId = builder.carriageId;
         this.ticketId = builder.ticketId;
         this.status = builder.status;
@@ -31,14 +33,8 @@ public class Seat {
         return status;
     }
 
-    @Override
-    public String toString() {
-        return "Seat{" +
-                "id=" + id +
-                ", carriageId=" + carriageId +
-                ", ticketId=" + ticketId +
-                ", status=" + status +
-                '}';
+    public Integer getNumber() {
+        return number;
     }
 
     public static Builder builder() {
@@ -47,6 +43,7 @@ public class Seat {
 
     public static class Builder {
         private Integer id;
+        private Integer number;
         private Integer carriageId;
         private Integer ticketId;
         private SeatStatus status;
@@ -56,6 +53,11 @@ public class Seat {
 
         public Builder withId(Integer id) {
             this.id = id;
+            return this;
+        }
+
+        public Builder withNumber(Integer number) {
+            this.number = number;
             return this;
         }
 
