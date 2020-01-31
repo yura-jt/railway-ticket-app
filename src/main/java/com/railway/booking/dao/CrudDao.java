@@ -1,5 +1,8 @@
 package com.railway.booking.dao;
 
+import com.railway.booking.dao.domain.Page;
+
+import java.util.List;
 import java.util.Optional;
 
 public interface CrudDao<E> {
@@ -7,9 +10,11 @@ public interface CrudDao<E> {
 
     Optional<E> findById(Integer id);
 
-    long count();
+    List<E> findAll(Page page);
 
     void update(E entity);
 
     void deleteById(Integer id);
+
+    long count();
 }
