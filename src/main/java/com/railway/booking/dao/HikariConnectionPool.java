@@ -10,8 +10,9 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class HikariConnectionPool implements DatabaseConnector {
-    private static final HikariDataSource hikariDataSource = new HikariDataSource();
     private static final Logger LOGGER = LogManager.getLogger(HikariConnectionPool.class);
+
+    private static final HikariDataSource hikariDataSource = new HikariDataSource();
 
     public HikariConnectionPool() {
         ResourceBundle resource = getDatabaseConfiguration();
@@ -28,7 +29,7 @@ public class HikariConnectionPool implements DatabaseConnector {
         try {
             return hikariDataSource.getConnection();
         } catch (SQLException e) {
-            LOGGER.error(e);
+            LOGGER.warn("Failed to return connection", e);
             throw new DatabaseSqlRuntimeException("Can not connect to database");
         }
     }
