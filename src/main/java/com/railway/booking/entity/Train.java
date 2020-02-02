@@ -35,8 +35,12 @@ public class Train {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Train train = (Train) o;
         return Objects.equals(id, train.id) &&
                 Objects.equals(code, train.code) &&

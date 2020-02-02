@@ -41,8 +41,12 @@ public class Carriage {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Carriage carriage = (Carriage) o;
         return Objects.equals(id, carriage.id) &&
                 type == carriage.type &&
