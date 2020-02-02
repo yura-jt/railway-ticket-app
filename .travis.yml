@@ -10,3 +10,6 @@ matrix:
   include:
     - env: JDK='Oracle JDK 11'
       install: . ./install-jdk.sh -F 11 -L BCL
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash)
