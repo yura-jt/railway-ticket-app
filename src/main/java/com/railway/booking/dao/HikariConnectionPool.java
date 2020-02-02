@@ -22,14 +22,13 @@ public class HikariConnectionPool implements DatabaseConnector {
         hikariDataSource.setPassword(resource.getString("db.password"));
         hikariDataSource.setMinimumIdle(100);
         hikariDataSource.setMaximumPoolSize(2000);
-        hikariDataSource.setAutoCommit(false);
     }
 
     public Connection getConnection() {
         try {
             return hikariDataSource.getConnection();
         } catch (SQLException e) {
-            LOGGER.warn("Failed to return connection", e);
+            LOGGER.error("Failed to return connection", e);
             throw new DatabaseSqlRuntimeException("Can not connect to database");
         }
     }
