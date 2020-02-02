@@ -3,26 +3,26 @@ package com.railway.booking.entity;
 import com.railway.booking.entity.enums.SeatStatus;
 
 public class Seat {
-    private final Integer id;
+    private final Integer billId;
     private final Integer number;
-    private final Integer carriageId;
     private final Integer ticketId;
+    private final Integer carriageId;
     private final SeatStatus status;
 
     private Seat(Builder builder) {
-        this.id = builder.id;
+        this.billId = builder.billId;
         this.number = builder.number;
-        this.carriageId = builder.carriageId;
         this.ticketId = builder.ticketId;
+        this.carriageId = builder.carriageId;
         this.status = builder.status;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getBillId() {
+        return billId;
     }
 
-    public Integer getCarriageId() {
-        return carriageId;
+    public Integer getNumber() {
+        return number;
     }
 
     public Integer getTicketId() {
@@ -33,8 +33,8 @@ public class Seat {
         return status;
     }
 
-    public Integer getNumber() {
-        return number;
+    public Integer getCarriageId() {
+        return carriageId;
     }
 
     public static Builder builder() {
@@ -42,17 +42,17 @@ public class Seat {
     }
 
     public static class Builder {
-        private Integer id;
+        private Integer billId;
         private Integer number;
-        private Integer carriageId;
         private Integer ticketId;
+        private Integer carriageId;
         private SeatStatus status;
 
         private Builder() {
         }
 
-        public Builder withId(Integer id) {
-            this.id = id;
+        public Builder withBillId(Integer billId) {
+            this.billId = billId;
             return this;
         }
 
@@ -61,13 +61,13 @@ public class Seat {
             return this;
         }
 
-        public Builder withCarriageId(Integer carriageId) {
-            this.carriageId = carriageId;
+        public Builder withTicketId(Integer ticketId) {
+            this.ticketId = ticketId;
             return this;
         }
 
-        public Builder withTicketId(Integer ticketId) {
-            this.ticketId = ticketId;
+        public Builder withCarriageId(Integer carriageId) {
+            this.carriageId = carriageId;
             return this;
         }
 

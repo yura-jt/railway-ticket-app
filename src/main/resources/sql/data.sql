@@ -4,7 +4,7 @@ VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'pa
        ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'admin', 'admin');
 
 INSERT INTO tickets(departure_station, destination_station, passenger_name, price, flight_id,
-                    seat_id, user_id, order_id, created_on)
+                    seat_id, user_id, bill_id, created_on)
 VALUES ('Кривий Ріг', 'Одеса', 'Бундуцький Олексій', 599.60, 2, 1, 1, 1, default),
        ('Кривий Ріг', 'Одеса', 'Бундуцька Марія', 599.60, 2, 2, 1, 2, default);
 
@@ -12,7 +12,7 @@ INSERT INTO trains(code, name)
 VALUES ('43K', 'Подільський експрес'),
        ('122', 'Срібна стріла');
 
-INSERT INTO routes(station, station_type, station_time, distance, train_id)
+INSERT INTO stations(name, type, time, distance, train_id)
 VALUES ('Київ', 'DEPARTURE_STATION', '18:55:00', 0, 1),
        ('Львів', 'ARRIVING_STATION', '02:34:00', 400, 1),
        ('Львів', 'DEPARTURE_STATION', '02:59:00', 400, 1),
@@ -44,16 +44,15 @@ VALUES ('КУПЕ', 1, 1, 36),
        ('КУПЕ', 1, 2, 32),
        ('КУПЕ', 2, 2, 32);
 
-INSERT INTO seats(number, carriage_id, ticket_id, status)
-VALUES (1, 1, NULL, 'RESERVED'),
-       (1, 6, 1, 'SOLD'),
-       (2, 6, 2, 'SOLD');
+INSERT INTO bills(order_id, status, price)
+VALUES (1, 'INVOICED', 860),
+       (2, 'PAID', 700),
+       (3, 'PAID', 700);
 
-INSERT INTO bills(order_id, status, price, user_id)
-VALUES (1, 'INVOICED', 860, 1),
-       (2, 'PAID', 700, 2),
-       (3, 'PAID', 700, 2);
-
+INSERT INTO seats(bill_id, number, carriage_id, ticket_id, status)
+VALUES (1, 1, 1, NULL, 'RESERVED'),
+       (2, 1, 6, 1, 'SOLD'),
+       (3, 2, 6, 2, 'SOLD');
 INSERT INTO tariffs(carriage_type, rate)
 VALUES ('OPEN_SLEEPING', 10),
        ('COUPE', 24),

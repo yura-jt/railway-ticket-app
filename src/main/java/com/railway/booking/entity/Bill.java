@@ -6,28 +6,22 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class Bill {
-    private final Integer id;
-    private final Order order;
+    private final Integer orderId;
     private final BillStatus billStatus;
     private final BigDecimal price;
     private final User user;
     private final LocalDateTime createdOn;
 
     private Bill(Builder builder) {
-        this.id = builder.id;
-        this.order = builder.order;
+        this.orderId = builder.orderId;
         this.billStatus = builder.billStatus;
         this.price = builder.price;
         this.user = builder.user;
         this.createdOn = builder.createdOn;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public Order getOrder() {
-        return order;
+    public Integer getOrderId() {
+        return orderId;
     }
 
     public BillStatus getStatus() {
@@ -49,8 +43,7 @@ public class Bill {
     @Override
     public String toString() {
         return "Bill{" +
-                "id=" + id +
-                ", order=" + order +
+                "orderId=" + orderId +
                 ", status=" + billStatus +
                 ", price=" + price +
                 ", user=" + user +
@@ -63,8 +56,7 @@ public class Bill {
     }
 
     public static class Builder {
-        private Integer id;
-        private Order order;
+        private Integer orderId;
         private BillStatus billStatus;
         private BigDecimal price;
         private User user;
@@ -73,13 +65,8 @@ public class Bill {
         private Builder() {
         }
 
-        public Builder withId(Integer id) {
-            this.id = id;
-            return this;
-        }
-
-        public Builder withOrder(Order order) {
-            this.order = order;
+        public Builder withOrderId(Integer orderId) {
+            this.orderId = orderId;
             return this;
         }
 

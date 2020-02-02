@@ -12,7 +12,7 @@ public class Ticket {
     private final Integer flightId;
     private final Integer seatId;
     private final Integer userId;
-    private final Integer orderId;
+    private final Integer billId;
 
     private Ticket(Builder builder) {
         this.id = builder.id;
@@ -23,7 +23,7 @@ public class Ticket {
         this.flightId = builder.flightId;
         this.seatId = builder.seatId;
         this.userId = builder.userId;
-        this.orderId = builder.orderId;
+        this.billId = builder.billId;
     }
 
     public Integer getId() {
@@ -58,14 +58,18 @@ public class Ticket {
         return userId;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public Integer getBillId() {
+        return billId;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Ticket ticket = (Ticket) o;
         return Objects.equals(id, ticket.id) &&
                 Objects.equals(departureStation, ticket.departureStation) &&
@@ -75,12 +79,13 @@ public class Ticket {
                 Objects.equals(flightId, ticket.flightId) &&
                 Objects.equals(seatId, ticket.seatId) &&
                 Objects.equals(userId, ticket.userId) &&
-                Objects.equals(orderId, ticket.orderId);
+                Objects.equals(billId, ticket.billId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, departureStation, destinationStation, passengerName, price, flightId, seatId, userId, orderId);
+        return Objects.hash(id, departureStation, destinationStation, passengerName,
+                price, flightId, seatId, userId, billId);
     }
 
     @Override
@@ -94,7 +99,7 @@ public class Ticket {
                 ", flightId=" + flightId +
                 ", seatId=" + seatId +
                 ", userId=" + userId +
-                ", orderId=" + orderId +
+                ", billId=" + billId +
                 '}';
     }
 
@@ -111,7 +116,7 @@ public class Ticket {
         private Integer flightId;
         private Integer seatId;
         private Integer userId;
-        private Integer orderId;
+        private Integer billId;
 
         private Builder() {
         }
@@ -156,8 +161,8 @@ public class Ticket {
             return this;
         }
 
-        public Builder withOrderId(Integer orderId) {
-            this.seatId = orderId;
+        public Builder withBillId(Integer billId) {
+            this.billId = billId;
             return this;
         }
 
