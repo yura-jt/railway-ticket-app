@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class HikariConnectionPool implements DatabaseConnector {
-        private static final Logger LOGGER = LogManager.getLogger(HikariConnectionPool.class);
+    private static final Logger LOGGER = LogManager.getLogger(HikariConnectionPool.class);
 
     private static final HikariDataSource hikariDataSource = new HikariDataSource();
 
