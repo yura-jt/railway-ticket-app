@@ -1,15 +1,20 @@
 package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
+import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
+import com.railway.booking.entity.User;
+import com.railway.booking.entity.enums.RoleType;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class UserDaoImpl<E> extends AbstractCrudDaoImpl<E> {
+public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
+    private static final String FIND_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email = ?";
     private static final String SAVE_QUERY =
             "INSERT INTO users (first_name, last_name, email, phone_number, password, role_type) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM users LIMIT ? OFFSET ?";
@@ -23,22 +28,27 @@ public class UserDaoImpl<E> extends AbstractCrudDaoImpl<E> {
     }
 
     @Override
-    public void save(E entity) {
+    public void save(User entity) {
         save(entity, SAVE_QUERY);
     }
 
     @Override
-    public Optional<E> findById(Integer id) {
+    public Optional<User> findById(Integer id) {
         return findById(id, FIND_BY_ID_QUERY);
     }
 
     @Override
-    public List<E> findAll(Page page) {
+    public Optional<User> findByEmail(String email) {
+        return findByParam(email, FIND_BY_EMAIL_QUERY);
+    }
+
+    @Override
+    public List<User> findAll(Page page) {
         return findAll(page, FIND_ALL_QUERY);
     }
 
     @Override
-    public void update(E entity) {
+    public void update(User entity) {
         update(entity, UPDATE_QUERY);
     }
 
@@ -53,7 +63,29 @@ public class UserDaoImpl<E> extends AbstractCrudDaoImpl<E> {
     }
 
     @Override
-    protected E mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        return null;
+    protected User mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+        return User.builder()
+                .withId(resultSet.getInt("id"))
+                .withFirstName(resultSet.getString("first_name"))
+                .withLastName(resultSet.getString("email"))
+                .withPhoneNumber(resultSet.getString("phone_number"))
+                .withPassword(resultSet.getString("password"))
+                .withRoleType(RoleType.valueOf(resultSet.getString("role_type")))
+                .build();
+    }
+
+    @Override
+    protected void insert(PreparedStatement preparedStatement, User entity) throws SQLException {
+        preparedStatement.setString(1, entity.getFirstName());
+        preparedStatement.setString(2, entity.getLastName());
+        preparedStatement.setString(3, entity.getEmail());
+        preparedStatement.setString(4, entity.getPhoneNumber());
+        preparedStatement.setString(5, entity.getPassword());
+        preparedStatement.setString(6, entity.getRoleType().toString());
+    }
+
+    @Override
+    protected void update(PreparedStatement preparedStatement, User entity) throws SQLException {
+        preparedStatement.setInt(7, entity.getId());
     }
 }

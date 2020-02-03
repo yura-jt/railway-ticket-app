@@ -1,6 +1,7 @@
 package com.railway.booking.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Ticket {
@@ -13,6 +14,7 @@ public class Ticket {
     private final Integer seatId;
     private final Integer userId;
     private final Integer billId;
+    private final LocalDateTime createdOn;
 
     private Ticket(Builder builder) {
         this.id = builder.id;
@@ -24,6 +26,7 @@ public class Ticket {
         this.seatId = builder.seatId;
         this.userId = builder.userId;
         this.billId = builder.billId;
+        this.createdOn = builder.createdOn;
     }
 
     public Integer getId() {
@@ -62,6 +65,10 @@ public class Ticket {
         return billId;
     }
 
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,13 +86,14 @@ public class Ticket {
                 Objects.equals(flightId, ticket.flightId) &&
                 Objects.equals(seatId, ticket.seatId) &&
                 Objects.equals(userId, ticket.userId) &&
-                Objects.equals(billId, ticket.billId);
+                Objects.equals(billId, ticket.billId) &&
+                Objects.equals(createdOn, ticket.createdOn);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, departureStation, destinationStation, passengerName,
-                price, flightId, seatId, userId, billId);
+                price, flightId, seatId, userId, billId, createdOn);
     }
 
     @Override
@@ -100,6 +108,7 @@ public class Ticket {
                 ", seatId=" + seatId +
                 ", userId=" + userId +
                 ", billId=" + billId +
+                ", createdOn=" + createdOn.toString() +
                 '}';
     }
 
@@ -117,6 +126,7 @@ public class Ticket {
         private Integer seatId;
         private Integer userId;
         private Integer billId;
+        private LocalDateTime createdOn;
 
         private Builder() {
         }
@@ -163,6 +173,11 @@ public class Ticket {
 
         public Builder withBillId(Integer billId) {
             this.billId = billId;
+            return this;
+        }
+
+        public Builder withCreatedOn(LocalDateTime createdOn) {
+            this.createdOn = createdOn;
             return this;
         }
 

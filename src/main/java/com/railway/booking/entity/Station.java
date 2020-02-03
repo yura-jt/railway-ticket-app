@@ -2,16 +2,16 @@ package com.railway.booking.entity;
 
 import com.railway.booking.entity.enums.StationType;
 
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class Station {
     private final Integer id;
     private final String name;
     private final StationType stationType;
-    private final LocalDateTime time;
+    private final LocalTime time;
     private final Integer distance;
-    private final Train train;
+    private final Integer trainId;
 
     private Station(Builder builder) {
         this.id = builder.id;
@@ -19,7 +19,7 @@ public class Station {
         this.stationType = builder.stationType;
         this.time = builder.time;
         this.distance = builder.distance;
-        this.train = builder.train;
+        this.trainId = builder.trainId;
     }
 
     public Integer getId() {
@@ -34,7 +34,7 @@ public class Station {
         return stationType;
     }
 
-    public LocalDateTime getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
@@ -42,8 +42,8 @@ public class Station {
         return distance;
     }
 
-    public Train getTrain() {
-        return train;
+    public Integer getTrainId() {
+        return trainId;
     }
 
     @Override
@@ -60,12 +60,12 @@ public class Station {
                 stationType == station.stationType &&
                 Objects.equals(time, station.time) &&
                 Objects.equals(distance, station.distance) &&
-                Objects.equals(train, station.train);
+                Objects.equals(trainId, station.trainId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, stationType, time, distance, train);
+        return Objects.hash(id, name, stationType, time, distance, trainId);
     }
 
     @Override
@@ -74,9 +74,9 @@ public class Station {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", stationType=" + stationType +
-                ", time=" + time +
+                ", time=" + time.toString() +
                 ", distance=" + distance +
-                ", train=" + train +
+                ", trainId=" + trainId +
                 '}';
     }
 
@@ -88,11 +88,21 @@ public class Station {
         private Integer id;
         private String name;
         private StationType stationType;
-        private LocalDateTime time;
+        private LocalTime time;
         private Integer distance;
-        private Train train;
+        private Integer trainId;
 
         private Builder() {
+        }
+
+        public Builder withId(Integer id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder withName(String name) {
+            this.name = name;
+            return this;
         }
 
         public Builder withStationType(StationType stationType) {
@@ -100,7 +110,7 @@ public class Station {
             return this;
         }
 
-        public Builder withTime(LocalDateTime time) {
+        public Builder withTime(LocalTime time) {
             this.time = time;
             return this;
         }
@@ -110,8 +120,8 @@ public class Station {
             return this;
         }
 
-        public Builder withTrain(Train train) {
-            this.train = train;
+        public Builder withTrainId(Integer trainId) {
+            this.trainId = trainId;
             return this;
         }
 

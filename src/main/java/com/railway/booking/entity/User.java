@@ -133,7 +133,7 @@ public class User {
             return this;
         }
 
-        public Builder withFirstName(RoleType roleType) {
+        public Builder withRoleType(RoleType roleType) {
             this.roleType = roleType;
             return this;
         }
