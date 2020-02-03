@@ -19,8 +19,8 @@ public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
             "INSERT INTO users (first_name, last_name, email, phone_number, password, role_type) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM users LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY =
-            "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone_number = ?, password= ?, role_type = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM users WHERE id = ?";
+            "UPDATE users SET first_name = ?, last_name = ?, email = ?, phone_number = ?, password= ?, role_type = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM users WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM users";
 
     public UserDaoImpl(DatabaseConnector connector) {
@@ -67,10 +67,11 @@ public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
         return User.builder()
                 .withId(resultSet.getInt("id"))
                 .withFirstName(resultSet.getString("first_name"))
-                .withLastName(resultSet.getString("email"))
+                .withLastName(resultSet.getString("last_name"))
+                .withEmail(resultSet.getString("email"))
                 .withPhoneNumber(resultSet.getString("phone_number"))
                 .withPassword(resultSet.getString("password"))
-                .withRoleType(RoleType.valueOf(resultSet.getString("role_type")))
+                .withRoleType(RoleType.valueOf(resultSet.getString("role_type").toUpperCase()))
                 .build();
     }
 
@@ -86,6 +87,7 @@ public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
 
     @Override
     protected void update(PreparedStatement preparedStatement, User entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(7, entity.getId());
     }
 }

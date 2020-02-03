@@ -60,7 +60,10 @@ public class User {
             return false;
         }
         User user = (User) o;
-        return id.equals(user.id) &&
+
+        boolean isIdEqual = (id != null && user.id != null) ? id.equals(user.id) : (id == null) && (user.id == null);
+
+        return isIdEqual &&
                 firstName.equals(user.firstName) &&
                 lastName.equals(user.lastName) &&
                 email.equals(user.email) &&
