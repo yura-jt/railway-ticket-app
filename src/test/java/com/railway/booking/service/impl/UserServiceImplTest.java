@@ -6,6 +6,7 @@ import com.railway.booking.entity.User;
 import com.railway.booking.entity.enums.RoleType;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.exception.EntityAlreadyExistException;
+import com.railway.booking.service.exception.EntityNotFoundException;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
 import org.junit.After;
@@ -29,7 +30,7 @@ public class UserServiceImplTest {
     private static final Integer USER_ID = 1;
     private static final String FIRST_NAME = "Isaac";
     private static final String LAST_NAME = "Asimov";
-    private static final String PASSWORD = "password";
+    private static final String PASSWORD = "encoded_password";
     private static final String PHONE_NUMBER = "+47213245654";
     private static final String USER_EMAIL = "user@gmail.com";
     private static final RoleType ROLE_TYPE = RoleType.PASSENGER;
@@ -73,7 +74,7 @@ public class UserServiceImplTest {
         verify(userDao).findByEmail(eq(USER_EMAIL));
     }
 
-    @Test
+    @Test(expected = EntityNotFoundException.class)
     public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
         when(passwordEncryptor.encrypt(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -85,7 +86,7 @@ public class UserServiceImplTest {
         verify(userDao).findByEmail(eq(USER_EMAIL));
     }
 
-    @Test
+    @Test(expected = EntityNotFoundException.class)
     public void userShouldNotLoginAsPasswordIsIncorrect() {
         when(passwordEncryptor.encrypt(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(USER));

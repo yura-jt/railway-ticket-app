@@ -46,12 +46,8 @@ public class UserServiceImpl implements UserService {
         String encryptPassword = passwordEncryptor.encrypt(password);
 
         User user = userDao.findByEmail(email).orElse(null);
-        boolean isValidUser = userDao.findByEmail(email)
-                .map(User::getPassword)
-                .filter(pass -> pass.equals(encryptPassword))
-                .isPresent();
 
-        if (!isValidUser) {
+        if (user == null || !user.getPassword().equals(encryptPassword)) {
             String message = String.format("User with email: %s is not registered or password is not correct", email);
             LOGGER.warn(message);
             throw new EntityNotFoundException(message);
