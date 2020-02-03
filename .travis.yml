@@ -2,14 +2,8 @@ language: java
 
 dist: xenial
 
-# Get latest install-jdk.sh script
-before_install:
-  - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
-
-matrix:
-  include:
-    - env: JDK='Oracle JDK 11'
-      install: . ./install-jdk.sh -F 11 -L BCL
+jdk:
+  - openjdk8
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
