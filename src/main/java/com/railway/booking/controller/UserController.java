@@ -24,7 +24,7 @@ public class UserController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final User user = (User) req.getSession().getAttribute("user");
         if (user.getRoleType() != RoleType.ADMIN) {
-            req.getRequestDispatcher("view/not_admin.jsp").forward(req, resp);
+            req.getRequestDispatcher("view/login.jsp").forward(req, resp);
         }
         final List<User> users = userService.findAll(1);
         req.setAttribute("users", users);

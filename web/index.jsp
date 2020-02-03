@@ -4,6 +4,6 @@
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+  Railway tickets booking app
   </body>
 </html>
