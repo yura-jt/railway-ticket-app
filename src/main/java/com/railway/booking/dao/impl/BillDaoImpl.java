@@ -15,8 +15,9 @@ public class BillDaoImpl extends AbstractCrudDaoImpl<Bill> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM bills WHERE order_id = ?";
     private static final String SAVE_QUERY = "INSERT INTO seats (order_id, status, price) VALUES (?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM bills LIMIT ? OFFSET ?";
-    private static final String UPDATE_QUERY = "UPDATE seats SET order_id = ?, status = ?, price = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM bills WHERE order_id = ?";
+    private static final String UPDATE_QUERY = "UPDATE seats SET order_id = ?, status = ?, price = ? " +
+            "where order_id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM bills WHERE order_id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM bills";
 
     public BillDaoImpl(DatabaseConnector connector) {
@@ -57,7 +58,7 @@ public class BillDaoImpl extends AbstractCrudDaoImpl<Bill> {
     protected Bill mapResultSetToEntity(ResultSet resultSet) throws SQLException {
         return Bill.builder()
                 .withOrderId(resultSet.getInt("order_id"))
-                .withBillStatus(BillStatus.valueOf(resultSet.getString("status")))
+                .withBillStatus(BillStatus.valueOf(resultSet.getString("status").toUpperCase()))
                 .withPrice(resultSet.getBigDecimal("price"))
                 .withCreatedOn(resultSet.getTimestamp("created_on").toLocalDateTime())
                 .build();
@@ -72,6 +73,7 @@ public class BillDaoImpl extends AbstractCrudDaoImpl<Bill> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Bill entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(4, entity.getOrderId());
     }
 }

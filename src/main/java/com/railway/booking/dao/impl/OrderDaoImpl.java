@@ -20,8 +20,8 @@ public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
             "departure_date, from_time, to_time, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM orders LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY = "UPDATE orders SET departure_station = ?, destination_station = ?, " +
-            "departure_date = ?, from_time = ?, to_time = ?, status = ?, user_id = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM orders WHERE id = ?";
+            "departure_date = ?, from_time = ?, to_time = ?, status = ?, user_id = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM orders WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM orders";
 
     public OrderDaoImpl(DatabaseConnector connector) {
@@ -70,7 +70,7 @@ public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
                         .toLocalDateTime())
                 .withFromTime(resultSet.getTime("from_time").toLocalTime())
                 .withToTime(resultSet.getTime("to_time").toLocalTime())
-                .withOrderStatus(OrderStatus.valueOf(resultSet.getString("status")))
+                .withOrderStatus(OrderStatus.valueOf(resultSet.getString("status").toUpperCase()))
                 .withUserId(resultSet.getInt("user_id"))
                 .build();
     }
@@ -88,6 +88,7 @@ public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Order entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(8, entity.getId());
     }
 }

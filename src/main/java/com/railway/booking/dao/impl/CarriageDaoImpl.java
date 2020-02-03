@@ -17,8 +17,8 @@ public class CarriageDaoImpl extends AbstractCrudDaoImpl<Carriage> {
             "VALUES (?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM carriages LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY = "UPDATE carriages SET type = ?, number = ?, capacity = ?," +
-            "flight_id = ? ";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM carriages WHERE id = ?";
+            "flight_id = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM carriages WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM carriages";
 
     public CarriageDaoImpl(DatabaseConnector connector) {
@@ -77,6 +77,7 @@ public class CarriageDaoImpl extends AbstractCrudDaoImpl<Carriage> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Carriage entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(6, entity.getId());
     }
 }

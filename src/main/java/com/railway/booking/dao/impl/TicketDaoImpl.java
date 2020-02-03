@@ -19,8 +19,8 @@ public class TicketDaoImpl extends AbstractCrudDaoImpl<Ticket> {
     private static final String FIND_ALL_QUERY = "SELECT * FROM users LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY =
             "UPDATE tickets SET departure_station = ?, destination_station = ?, passenger_name = ?, price = ?, " +
-                    "flight_id = ?, seat_id = ?, user_id = ?, bill_id = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM tickets WHERE id = ?";
+                    "flight_id = ?, seat_id = ?, user_id = ?, bill_id = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM tickets WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM tickets";
 
     public TicketDaoImpl(DatabaseConnector connector) {
@@ -88,6 +88,7 @@ public class TicketDaoImpl extends AbstractCrudDaoImpl<Ticket> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Ticket entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(7, entity.getId());
     }
 }

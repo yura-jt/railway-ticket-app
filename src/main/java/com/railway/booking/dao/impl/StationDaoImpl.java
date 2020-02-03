@@ -21,8 +21,8 @@ public class StationDaoImpl extends AbstractCrudDaoImpl<Station> implements Stat
     private static final String FIND_ALL_STATIONS_BY_TRAIN_QUERY = "SELECT * FROM trains LEFT JOIN stations ON " +
             "stations.train_id = trains.id WHERE trains.id = ?";
     private static final String UPDATE_QUERY = "UPDATE stations SET name = ?, type = ?, time = ?, distance = ?, " +
-            "train_id = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM stations WHERE id = ?";
+            "train_id = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM stations WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM stations";
 
     public StationDaoImpl(DatabaseConnector connector) {
@@ -70,7 +70,7 @@ public class StationDaoImpl extends AbstractCrudDaoImpl<Station> implements Stat
         return Station.builder()
                 .withId(resultSet.getInt("id"))
                 .withName(resultSet.getString("name"))
-                .withStationType(StationType.valueOf(resultSet.getString("type")))
+                .withStationType(StationType.valueOf(resultSet.getString("type").toUpperCase()))
                 .withTime(resultSet.getTime("time").toLocalTime())
                 .withDistance(resultSet.getInt("distance"))
                 .withTrainId(resultSet.getInt("train_id"))
@@ -88,6 +88,7 @@ public class StationDaoImpl extends AbstractCrudDaoImpl<Station> implements Stat
 
     @Override
     protected void update(PreparedStatement preparedStatement, Station entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(6, entity.getId());
     }
 }

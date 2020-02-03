@@ -17,8 +17,8 @@ public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
             "ticket_id, status) VALUES (?, ?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM seats LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY = "UPDATE seats SET bill_id = ?, number = ?, carriage_id = ?," +
-            "ticket_id = ?, status = ? ";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM seats WHERE bill_id = ?";
+            "ticket_id = ?, status = ? where bill_id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM seats WHERE bill_id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM seats";
 
     public SeatDaoImpl(DatabaseConnector connector) {
@@ -62,7 +62,7 @@ public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
                 .withNumber(resultSet.getInt("number"))
                 .withTicketId(resultSet.getInt("ticket_id"))
                 .withCarriageId(resultSet.getInt("ticket_id"))
-                .withSeatStatus(SeatStatus.valueOf(resultSet.getString("status")))
+                .withSeatStatus(SeatStatus.valueOf(resultSet.getString("status").toUpperCase()))
                 .build();
     }
 
@@ -77,6 +77,7 @@ public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Seat entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(6, entity.getBillId());
     }
 }

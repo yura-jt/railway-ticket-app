@@ -37,8 +37,8 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
         int limit = page.getItemsPerPage();
         int offset = (page.getPageNumber() - 1) * limit;
         try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(findAllQuery)) {
-            OBJ_PARAM_SETTER.accept(preparedStatement, limit);
-            OBJ_PARAM_SETTER.accept(preparedStatement, offset);
+            preparedStatement.setObject(1, limit);
+            preparedStatement.setObject(2, offset);
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<E> entities = new ArrayList<>();
                 while (resultSet.next()) {
@@ -102,6 +102,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     protected void deleteById(Integer id, String deleteByIdQuery) {
         try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(deleteByIdQuery)) {
             OBJ_PARAM_SETTER.accept(preparedStatement, id);
+            preparedStatement.execute();
         } catch (SQLException e) {
             String message = String.format("Fail to execute delete by id query with id: %d", id);
             LOGGER.warn(message, e);
@@ -112,6 +113,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     protected Long count(String countQuery) {
         Long result = 0L;
         try (final Statement statement = connector.getConnection().createStatement()) {
+            statement.execute(countQuery);
             try (final ResultSet resultSet = statement.getResultSet()) {
                 if (resultSet.next()) {
                     result = resultSet.getLong(1);

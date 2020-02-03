@@ -17,8 +17,8 @@ public class FlightDaoImpl extends AbstractCrudDaoImpl<Flight> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM flights WHERE id = ?";
     private static final String SAVE_QUERY = "INSERT INTO flights (departure_date, train_id) VALUES (?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM flights LIMIT ? OFFSET ?";
-    private static final String UPDATE_QUERY = "UPDATE flights SET departure_date = ?, train_id = ?";
-    private static final String DELETE_BY_ID_QUERY = "DELETE * FROM flights WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE flights SET departure_date = ?, train_id = ? where id = ?";
+    private static final String DELETE_BY_ID_QUERY = "DELETE FROM flights WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM flights";
 
     public FlightDaoImpl(DatabaseConnector connector) {
@@ -75,6 +75,7 @@ public class FlightDaoImpl extends AbstractCrudDaoImpl<Flight> {
 
     @Override
     protected void update(PreparedStatement preparedStatement, Flight entity) throws SQLException {
+        insert(preparedStatement, entity);
         preparedStatement.setInt(3, entity.getId());
     }
 }
