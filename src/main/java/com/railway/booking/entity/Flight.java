@@ -1,11 +1,13 @@
 package com.railway.booking.entity;
 
+import java.time.LocalDateTime;
+
 public class Flight {
     private final Integer id;
-    private final String departureDate;
+    private final LocalDateTime departureDate;
     private final Integer trainId;
 
-    public Flight(Integer id, String departureDate, Integer trainId) {
+    public Flight(Integer id, LocalDateTime departureDate, Integer trainId) {
         this.id = id;
         this.departureDate = departureDate;
         this.trainId = trainId;
@@ -15,7 +17,7 @@ public class Flight {
         return id;
     }
 
-    public String getDepartureDate() {
+    public LocalDateTime getDepartureDate() {
         return departureDate;
     }
 
@@ -27,7 +29,7 @@ public class Flight {
     public String toString() {
         return "Flight{" +
                 "id=" + id +
-                ", departureDate='" + departureDate + '\'' +
+                ", departureDate='" + departureDate.toString() + '\'' +
                 ", trainId=" + trainId +
                 '}';
     }

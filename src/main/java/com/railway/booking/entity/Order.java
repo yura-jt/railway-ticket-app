@@ -3,14 +3,15 @@ package com.railway.booking.entity;
 import com.railway.booking.entity.enums.OrderStatus;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class Order {
     private final Integer id;
     private final String departureStation;
     private final String destinationStation;
     private final LocalDateTime departureDate;
-    private final LocalDateTime fromTime;
-    private final LocalDateTime toTime;
+    private final LocalTime fromTime;
+    private final LocalTime toTime;
     private final OrderStatus status;
     private final Integer userId;
 
@@ -41,11 +42,11 @@ public class Order {
         return departureDate;
     }
 
-    public LocalDateTime getFromTime() {
+    public LocalTime getFromTime() {
         return fromTime;
     }
 
-    public LocalDateTime getToTime() {
+    public LocalTime getToTime() {
         return toTime;
     }
 
@@ -80,8 +81,8 @@ public class Order {
         private String departureStation;
         private String destinationStation;
         private LocalDateTime departureDate;
-        private LocalDateTime fromTime;
-        private LocalDateTime toTime;
+        private LocalTime fromTime;
+        private LocalTime toTime;
         private OrderStatus status;
         private Integer userId;
 
@@ -108,17 +109,17 @@ public class Order {
             return this;
         }
 
-        public Builder withFromTimeLocalDateTime(LocalDateTime fromTime) {
+        public Builder withFromTime(LocalTime fromTime) {
             this.fromTime = fromTime;
             return this;
         }
 
-        public Builder withToTime(LocalDateTime toTime) {
+        public Builder withToTime(LocalTime toTime) {
             this.toTime = toTime;
             return this;
         }
 
-        public Builder withSeatStatus(OrderStatus status) {
+        public Builder withOrderStatus(OrderStatus status) {
             this.status = status;
             return this;
         }
