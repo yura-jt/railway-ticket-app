@@ -10,8 +10,6 @@ import com.railway.booking.service.impl.UserServiceImpl;
 import com.railway.booking.service.validator.UserValidator;
 
 public class ApplicationInjector {
-    private static final DatabaseConnector CONNECTOR = new HikariConnectionPool();
-
     private static ApplicationInjector applicationInjector;
 
     private static final UserValidator USER_VALIDATOR = new UserValidator();
