@@ -86,8 +86,7 @@ public class Ticket {
                 Objects.equals(flightId, ticket.flightId) &&
                 Objects.equals(seatId, ticket.seatId) &&
                 Objects.equals(userId, ticket.userId) &&
-                Objects.equals(billId, ticket.billId) &&
-                Objects.equals(createdOn, ticket.createdOn);
+                Objects.equals(billId, ticket.billId);
     }
 
     @Override
@@ -108,7 +107,6 @@ public class Ticket {
                 ", seatId=" + seatId +
                 ", userId=" + userId +
                 ", billId=" + billId +
-                ", createdOn=" + createdOn.toString() +
                 '}';
     }
 

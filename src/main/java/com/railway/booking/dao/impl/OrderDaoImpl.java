@@ -1,7 +1,6 @@
 package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Order;
 import com.railway.booking.entity.enums.OrderStatus;
 
@@ -11,8 +10,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Optional;
 
 public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM orders WHERE id = ?";
@@ -25,37 +22,7 @@ public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM orders";
 
     public OrderDaoImpl(DatabaseConnector connector) {
-        super(connector);
-    }
-
-    @Override
-    public void save(Order entity) {
-        save(entity, SAVE_QUERY);
-    }
-
-    @Override
-    public Optional<Order> findById(Integer id) {
-        return findById(id, FIND_BY_ID_QUERY);
-    }
-
-    @Override
-    public List<Order> findAll(Page page) {
-        return findAll(page, FIND_ALL_QUERY);
-    }
-
-    @Override
-    public void update(Order entity) {
-        update(entity, UPDATE_QUERY);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        deleteById(id, DELETE_BY_ID_QUERY);
-    }
-
-    @Override
-    public long count() {
-        return count(COUNT_QUERY);
+        super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);
     }
 
     @Override

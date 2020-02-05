@@ -1,21 +1,23 @@
 package com.railway.booking.dao.impl;
 
+import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
-import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.Tariff;
+import com.railway.booking.entity.enums.CarriageType;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertNull;
@@ -24,8 +26,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserDaoImplTest {
-    private static UserDao userDao;
+public class TariffDaoImplTest {
+    private static CrudDao<Tariff> tariffDao;
     private static DatabaseConnector dataSource;
     private static final String SCHEMA_SQL_PATH = "src/test/resources/sql/schema.sql";
     private static final String DATA_SQL_PATH = "src/test/resources/sql/data.sql";
@@ -35,7 +37,7 @@ public class UserDaoImplTest {
     @BeforeClass
     public static void init() {
         dataSource = new TestDatabaseConnector();
-        userDao = new UserDaoImpl(dataSource);
+        tariffDao = new TariffDaoImpl(dataSource);
     }
 
     @Before
@@ -58,80 +60,48 @@ public class UserDaoImplTest {
         }
     }
 
-    private User generateTestUser(Integer id) {
-        return User.builder()
-                .withId(id)
-                .withFirstName("Canute")
-                .withLastName("Ithidriel")
-                .withEmail("canute@gmail.com")
-                .withPhoneNumber("+3804565478754")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
-                .build();
+    private Tariff generateTestEntity(Integer id) {
+        return new Tariff(1, CarriageType.LUX, new BigDecimal(451.15));
     }
 
-    private List<User> generateListUser(int quantity) {
-        List<User> list = new ArrayList<>();
+    private List<Tariff> generateListOfEntities(int quantity) {
+        List<Tariff> list = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            User user = User.builder()
-                    .withId(i + 1)
-                    .withFirstName("Canute" + i)
-                    .withLastName("Ithidriel" + i)
-                    .withEmail("canute@gmail.com" + i)
-                    .withPhoneNumber("+3804565478754" + i)
-                    .withPassword("password" + i)
-                    .withRoleType(RoleType.PASSENGER)
-                    .build();
-            list.add(user);
+            int id = i + 1;
+            CarriageType carriageType = CarriageType.values()
+                    [ThreadLocalRandom.current().nextInt(0, CarriageType.values().length)];
+            BigDecimal rate = new BigDecimal(35 + (i * 10));
+            Tariff tariff = new Tariff((id), carriageType, rate);
+            list.add(tariff);
         }
         return list;
     }
 
-
     @Test
     public void saveShouldCorrectSaveUserToDatabase() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
+        int countBeforeInsert = (int) tariffDao.count();
+        Tariff expected = generateTestEntity(countBeforeInsert + 1);
 
-        userDao.save(expectedUser);
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
+        tariffDao.save(expected);
+        Tariff actual = tariffDao.findById(expected.getId()).orElse(null);
 
-        assertNotNull(actualUser.getId());
-        assertEquals(userCountBeforeInsert + 1, userDao.count());
+        assertNotNull(actual.getId());
+        assertEquals(countBeforeInsert + 1, tariffDao.count());
     }
 
     @Test
-    public void findByIdShouldReturnCorrectUser() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
+    public void findByIdShouldReturnCorrectUser() throws SQLException {
+        createTables(dataSource);
+        int countBeforeInsert = (int) tariffDao.count();
+        Tariff expected = generateTestEntity(countBeforeInsert + 1);
+        tariffDao.save(expected);
 
-        User actualUser = userDao.findById(userCountBeforeInsert + 1).orElse(null);
+        Tariff actual = tariffDao.findById(countBeforeInsert + 1).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), actualUser.getRoleType());
-    }
-
-    @Test
-    public void findByEmail() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
-
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
-
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), expectedUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), expectedUser.getLastName());
-        assertEquals(expectedUser.getEmail(), expectedUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), expectedUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), expectedUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), expectedUser.getRoleType());
+        assertEquals(expected, actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getCarriageType(), actual.getCarriageType());
+        assertEquals(expected.getRate(), actual.getRate());
     }
 
     @Test
@@ -141,12 +111,12 @@ public class UserDaoImplTest {
         int pageNumber = 1;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Tariff> tariffs = generateListOfEntities(quantity);
+        tariffs.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Tariff> actual = tariffDao.findAll(page);
+        List<Tariff> expected = tariffs.stream()
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
 
@@ -164,12 +134,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Tariff> list = generateListOfEntities(quantity);
+        list.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Tariff> actual = tariffDao.findAll(page);
+        List<Tariff> expected = list.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -187,12 +157,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Tariff> entities = generateListOfEntities(quantity);
+        entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Tariff> actual = tariffDao.findAll(page);
+        List<Tariff> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -210,12 +180,12 @@ public class UserDaoImplTest {
         int pageNumber = 2;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Tariff> entities = generateListOfEntities(quantity);
+        entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Tariff> actual = tariffDao.findAll(page);
+        List<Tariff> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -227,46 +197,39 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void update() {
-        int userCountBeforeInsert = (int) userDao.count();
+    public void update() throws SQLException {
+        createTables(dataSource);
+        int userCountBeforeInsert = (int) tariffDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
+        Tariff testEntity = generateTestEntity(id);
+        tariffDao.save(testEntity);
 
-        int userCountAfterInsert = (int) userDao.count();
+        int countAfterInsert = (int) tariffDao.count();
 
-        User expectedUser = User.builder()
-                .withId(id)
-                .withFirstName("Михайло")
-                .withLastName("Клинобородий")
-                .withEmail("maximus@gmail.com")
-                .withPhoneNumber("+43457056578")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
-                .build();
+        Tariff expected = new Tariff(1, CarriageType.COUPE, new BigDecimal("54.00"));
 
-        userDao.update(expectedUser);
-        int userCountAfterUpdate = (int) userDao.count();
-        User actualUser = userDao.findById(id).orElse(null);
+        tariffDao.update(expected);
+        int countAfterUpdate = (int) tariffDao.count();
+        Tariff actual = tariffDao.findById(id).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(userCountAfterUpdate, userCountAfterInsert);
+        assertEquals(expected, actual);
+        assertEquals(countAfterUpdate, countAfterInsert);
     }
 
     @Test
     public void deleteById() {
-        int userCountBeforeInsert = (int) userDao.count();
+        int userCountBeforeInsert = (int) tariffDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
-        int beforeDeleteSize = (int) userDao.count();
+        Tariff testEntity = generateTestEntity(id);
+        tariffDao.save(testEntity);
+        int beforeDeleteSize = (int) tariffDao.count();
 
-        userDao.deleteById(id);
-        int actualSize = (int) userDao.count();
+        tariffDao.deleteById(id);
+        int actualSize = (int) tariffDao.count();
 
 
-        User actualUser = userDao.findById(id).orElse(null);
-        assertNull(actualUser);
+        Tariff actual = tariffDao.findById(id).orElse(null);
+        assertNull(actual);
         assertEquals(beforeDeleteSize - 1, actualSize);
         assertNotEquals(beforeDeleteSize, actualSize);
     }
@@ -274,7 +237,7 @@ public class UserDaoImplTest {
     @Test
     public void countShouldReturnZeroOnEmptyTable() throws SQLException {
         createTables(dataSource);
-        int actualCount = (int) userDao.count();
+        int actualCount = (int) tariffDao.count();
 
         assertEquals(0, actualCount);
     }
@@ -284,9 +247,9 @@ public class UserDaoImplTest {
         createTables(dataSource);
         int expected = 9;
 
-        List<User> users = generateListUser(expected);
-        users.forEach(userDao::save);
-        int actualCount = (int) userDao.count();
+        List<Tariff> entities = generateListOfEntities(expected);
+        entities.forEach(tariffDao::save);
+        int actualCount = (int) tariffDao.count();
         assertEquals(expected, actualCount);
     }
 

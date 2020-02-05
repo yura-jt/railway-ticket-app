@@ -1,12 +1,11 @@
 package com.railway.booking.dao.impl;
 
+import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
-import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.Train;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -24,8 +23,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserDaoImplTest {
-    private static UserDao userDao;
+public class TrainDaoImplTest {
+    private static CrudDao<Train> trainDao;
     private static DatabaseConnector dataSource;
     private static final String SCHEMA_SQL_PATH = "src/test/resources/sql/schema.sql";
     private static final String DATA_SQL_PATH = "src/test/resources/sql/data.sql";
@@ -35,7 +34,7 @@ public class UserDaoImplTest {
     @BeforeClass
     public static void init() {
         dataSource = new TestDatabaseConnector();
-        userDao = new UserDaoImpl(dataSource);
+        trainDao = new TrainDaoImpl(dataSource);
     }
 
     @Before
@@ -58,80 +57,47 @@ public class UserDaoImplTest {
         }
     }
 
-    private User generateTestUser(Integer id) {
-        return User.builder()
-                .withId(id)
-                .withFirstName("Canute")
-                .withLastName("Ithidriel")
-                .withEmail("canute@gmail.com")
-                .withPhoneNumber("+3804565478754")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
-                .build();
+    private Train generateTestEntity(Integer id) {
+        return new Train(1, "43K", "Подільський експрес");
     }
 
-    private List<User> generateListUser(int quantity) {
-        List<User> list = new ArrayList<>();
+    private List<Train> generateListOfEntities(int quantity) {
+        List<Train> list = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            User user = User.builder()
-                    .withId(i + 1)
-                    .withFirstName("Canute" + i)
-                    .withLastName("Ithidriel" + i)
-                    .withEmail("canute@gmail.com" + i)
-                    .withPhoneNumber("+3804565478754" + i)
-                    .withPassword("password" + i)
-                    .withRoleType(RoleType.PASSENGER)
-                    .build();
-            list.add(user);
+            int id = i + 1;
+            String code = "43K v" + i;
+            String name = "експрес №" + i;
+            Train train = new Train((id), code, name);
+            list.add(train);
         }
         return list;
     }
 
-
     @Test
     public void saveShouldCorrectSaveUserToDatabase() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
+        int countBeforeInsert = (int) trainDao.count();
+        Train expected = generateTestEntity(countBeforeInsert + 1);
 
-        userDao.save(expectedUser);
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
+        trainDao.save(expected);
+        Train actual = trainDao.findById(expected.getId()).orElse(null);
 
-        assertNotNull(actualUser.getId());
-        assertEquals(userCountBeforeInsert + 1, userDao.count());
+        assertNotNull(actual.getId());
+        assertEquals(countBeforeInsert + 1, trainDao.count());
     }
 
     @Test
-    public void findByIdShouldReturnCorrectUser() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
+    public void findByIdShouldReturnCorrectUser() throws SQLException {
+        createTables(dataSource);
+        int countBeforeInsert = (int) trainDao.count();
+        Train expected = generateTestEntity(countBeforeInsert + 1);
+        trainDao.save(expected);
 
-        User actualUser = userDao.findById(userCountBeforeInsert + 1).orElse(null);
+        Train actual = trainDao.findById(countBeforeInsert + 1).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), actualUser.getRoleType());
-    }
-
-    @Test
-    public void findByEmail() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
-
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
-
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), expectedUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), expectedUser.getLastName());
-        assertEquals(expectedUser.getEmail(), expectedUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), expectedUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), expectedUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), expectedUser.getRoleType());
+        assertEquals(expected, actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getCode(), actual.getCode());
+        assertEquals(expected.getName(), actual.getName());
     }
 
     @Test
@@ -141,12 +107,12 @@ public class UserDaoImplTest {
         int pageNumber = 1;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Train> trains = generateListOfEntities(quantity);
+        trains.forEach(trainDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Train> actual = trainDao.findAll(page);
+        List<Train> expected = trains.stream()
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
 
@@ -164,12 +130,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Train> list = generateListOfEntities(quantity);
+        list.forEach(trainDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Train> actual = trainDao.findAll(page);
+        List<Train> expected = list.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -187,12 +153,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Train> entities = generateListOfEntities(quantity);
+        entities.forEach(trainDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Train> actual = trainDao.findAll(page);
+        List<Train> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -210,12 +176,12 @@ public class UserDaoImplTest {
         int pageNumber = 2;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Train> entities = generateListOfEntities(quantity);
+        entities.forEach(trainDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Train> actual = trainDao.findAll(page);
+        List<Train> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -227,46 +193,39 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void update() {
-        int userCountBeforeInsert = (int) userDao.count();
+    public void update() throws SQLException {
+        createTables(dataSource);
+        int userCountBeforeInsert = (int) trainDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
+        Train testEntity = generateTestEntity(id);
+        trainDao.save(testEntity);
 
-        int userCountAfterInsert = (int) userDao.count();
+        int countAfterInsert = (int) trainDao.count();
 
-        User expectedUser = User.builder()
-                .withId(id)
-                .withFirstName("Михайло")
-                .withLastName("Клинобородий")
-                .withEmail("maximus@gmail.com")
-                .withPhoneNumber("+43457056578")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
-                .build();
+        Train expected = new Train(1, "43K", "Подільський експрес");
 
-        userDao.update(expectedUser);
-        int userCountAfterUpdate = (int) userDao.count();
-        User actualUser = userDao.findById(id).orElse(null);
+        trainDao.update(expected);
+        int countAfterUpdate = (int) trainDao.count();
+        Train actual = trainDao.findById(id).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(userCountAfterUpdate, userCountAfterInsert);
+        assertEquals(expected, actual);
+        assertEquals(countAfterUpdate, countAfterInsert);
     }
 
     @Test
     public void deleteById() {
-        int userCountBeforeInsert = (int) userDao.count();
+        int userCountBeforeInsert = (int) trainDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
-        int beforeDeleteSize = (int) userDao.count();
+        Train testEntity = generateTestEntity(id);
+        trainDao.save(testEntity);
+        int beforeDeleteSize = (int) trainDao.count();
 
-        userDao.deleteById(id);
-        int actualSize = (int) userDao.count();
+        trainDao.deleteById(id);
+        int actualSize = (int) trainDao.count();
 
 
-        User actualUser = userDao.findById(id).orElse(null);
-        assertNull(actualUser);
+        Train actual = trainDao.findById(id).orElse(null);
+        assertNull(actual);
         assertEquals(beforeDeleteSize - 1, actualSize);
         assertNotEquals(beforeDeleteSize, actualSize);
     }
@@ -274,7 +233,7 @@ public class UserDaoImplTest {
     @Test
     public void countShouldReturnZeroOnEmptyTable() throws SQLException {
         createTables(dataSource);
-        int actualCount = (int) userDao.count();
+        int actualCount = (int) trainDao.count();
 
         assertEquals(0, actualCount);
     }
@@ -284,9 +243,9 @@ public class UserDaoImplTest {
         createTables(dataSource);
         int expected = 9;
 
-        List<User> users = generateListUser(expected);
-        users.forEach(userDao::save);
-        int actualCount = (int) userDao.count();
+        List<Train> entities = generateListOfEntities(expected);
+        entities.forEach(trainDao::save);
+        int actualCount = (int) trainDao.count();
         assertEquals(expected, actualCount);
     }
 

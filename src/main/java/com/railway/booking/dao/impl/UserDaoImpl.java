@@ -2,14 +2,12 @@ package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.UserDao;
-import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.User;
 import com.railway.booking.entity.enums.RoleType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Optional;
 
 public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
@@ -24,42 +22,12 @@ public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM users";
 
     public UserDaoImpl(DatabaseConnector connector) {
-        super(connector);
-    }
-
-    @Override
-    public void save(User entity) {
-        save(entity, SAVE_QUERY);
-    }
-
-    @Override
-    public Optional<User> findById(Integer id) {
-        return findById(id, FIND_BY_ID_QUERY);
+        super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);
     }
 
     @Override
     public Optional<User> findByEmail(String email) {
         return findByParam(email, FIND_BY_EMAIL_QUERY);
-    }
-
-    @Override
-    public List<User> findAll(Page page) {
-        return findAll(page, FIND_ALL_QUERY);
-    }
-
-    @Override
-    public void update(User entity) {
-        update(entity, UPDATE_QUERY);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        deleteById(id, DELETE_BY_ID_QUERY);
-    }
-
-    @Override
-    public long count() {
-        return count(COUNT_QUERY);
     }
 
     @Override
