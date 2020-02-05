@@ -1,17 +1,11 @@
 package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Train;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import static java.util.Collections.unmodifiableList;
 
 public class TrainDaoImpl extends AbstractCrudDaoImpl<Train> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM trains WHERE id = ?";
@@ -22,47 +16,15 @@ public class TrainDaoImpl extends AbstractCrudDaoImpl<Train> {
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM trains";
 
     public TrainDaoImpl(DatabaseConnector connector) {
-        super(connector);
-    }
-
-    @Override
-    public void save(Train entity) {
-        save(entity, SAVE_QUERY);
-    }
-
-    @Override
-    public Optional<Train> findById(Integer id) {
-        return findById(id, FIND_BY_ID_QUERY);
-    }
-
-    @Override
-    public List<Train> findAll(Page page) {
-        return findAll(page, FIND_ALL_QUERY);
-    }
-
-    @Override
-    public void update(Train entity) {
-        update(entity, UPDATE_QUERY);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        deleteById(id, DELETE_BY_ID_QUERY);
-    }
-
-    @Override
-    public long count() {
-        return count(COUNT_QUERY);
+        super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);
     }
 
     @Override
     protected Train mapResultSetToEntity(ResultSet resultSet) throws SQLException {
-        return Train.builder()
-                .withId(resultSet.getInt("id"))
-                .withCode(resultSet.getString("code"))
-                .withName(resultSet.getString("name"))
-                .withStations(unmodifiableList(new ArrayList<>()))
-                .build();
+        int id = resultSet.getInt("id");
+        String code = resultSet.getString("code");
+        String name = resultSet.getString("name");
+        return new Train(id, code, name);
     }
 
     @Override

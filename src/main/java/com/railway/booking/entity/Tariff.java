@@ -3,6 +3,7 @@ package com.railway.booking.entity;
 import com.railway.booking.entity.enums.CarriageType;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public class Tariff {
     private final Integer id;
@@ -34,5 +35,24 @@ public class Tariff {
                 ", carriageType=" + carriageType +
                 ", rate=" + rate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Tariff tariff = (Tariff) o;
+        return Objects.equals(id, tariff.id) &&
+                carriageType == tariff.carriageType &&
+                Objects.equals(rate, tariff.rate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, carriageType, rate);
     }
 }

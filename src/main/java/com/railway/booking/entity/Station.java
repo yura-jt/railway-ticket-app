@@ -58,7 +58,6 @@ public class Station {
         return Objects.equals(id, station.id) &&
                 Objects.equals(name, station.name) &&
                 stationType == station.stationType &&
-                Objects.equals(time, station.time) &&
                 Objects.equals(distance, station.distance) &&
                 Objects.equals(trainId, station.trainId);
     }

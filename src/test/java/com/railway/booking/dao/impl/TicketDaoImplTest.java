@@ -1,19 +1,20 @@
 package com.railway.booking.dao.impl;
 
+import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
-import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.Ticket;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,8 +25,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class UserDaoImplTest {
-    private static UserDao userDao;
+public class TicketDaoImplTest {
+    private static CrudDao<Ticket> ticketDao;
     private static DatabaseConnector dataSource;
     private static final String SCHEMA_SQL_PATH = "src/test/resources/sql/schema.sql";
     private static final String DATA_SQL_PATH = "src/test/resources/sql/data.sql";
@@ -35,7 +36,7 @@ public class UserDaoImplTest {
     @BeforeClass
     public static void init() {
         dataSource = new TestDatabaseConnector();
-        userDao = new UserDaoImpl(dataSource);
+        ticketDao = new TicketDaoImpl(dataSource);
     }
 
     @Before
@@ -58,80 +59,71 @@ public class UserDaoImplTest {
         }
     }
 
-    private User generateTestUser(Integer id) {
-        return User.builder()
-                .withId(id)
-                .withFirstName("Canute")
-                .withLastName("Ithidriel")
-                .withEmail("canute@gmail.com")
-                .withPhoneNumber("+3804565478754")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
+    private Ticket generateTestEntity(Integer id) {
+        return Ticket.builder()
+                .withId(1)
+                .withDepartureStation("Київ")
+                .withDestinationStation("Львів")
+                .withPassengerName("Іван Миколайчук")
+                .withPrice(new BigDecimal(154.15))
+                .withFlightId(1)
+                .withSeatId(20)
+                .withUserId(1)
+                .withBillId(1)
+                .withCreatedOn(LocalDateTime.now())
                 .build();
     }
 
-    private List<User> generateListUser(int quantity) {
-        List<User> list = new ArrayList<>();
+    private List<Ticket> generateListOfEntities(int quantity) {
+        List<Ticket> list = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
-            User user = User.builder()
+            Ticket ticket = Ticket.builder()
                     .withId(i + 1)
-                    .withFirstName("Canute" + i)
-                    .withLastName("Ithidriel" + i)
-                    .withEmail("canute@gmail.com" + i)
-                    .withPhoneNumber("+3804565478754" + i)
-                    .withPassword("password" + i)
-                    .withRoleType(RoleType.PASSENGER)
+                    .withDepartureStation("Київ #" + i)
+                    .withDestinationStation("Львів #" + i)
+                    .withPassengerName("Іван Миколайчук #" + i)
+                    .withPrice(new BigDecimal(154.15 + i))
+                    .withFlightId(1 + i)
+                    .withSeatId(20 + i)
+                    .withUserId(1 + i)
+                    .withBillId(1 + i)
                     .build();
-            list.add(user);
+            list.add(ticket);
         }
         return list;
     }
 
-
     @Test
     public void saveShouldCorrectSaveUserToDatabase() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
+        int countBeforeInsert = (int) ticketDao.count();
+        Ticket expected = generateTestEntity(countBeforeInsert + 1);
 
-        userDao.save(expectedUser);
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
+        ticketDao.save(expected);
+        Ticket actual = ticketDao.findById(expected.getId()).orElse(null);
 
-        assertNotNull(actualUser.getId());
-        assertEquals(userCountBeforeInsert + 1, userDao.count());
+        assertNotNull(actual.getId());
+        assertEquals(countBeforeInsert + 1, ticketDao.count());
     }
 
     @Test
-    public void findByIdShouldReturnCorrectUser() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
+    public void findByIdShouldReturnCorrectUser() throws SQLException {
+        createTables(dataSource);
+        int countBeforeInsert = (int) ticketDao.count();
+        Ticket expected = generateTestEntity(countBeforeInsert + 1);
+        ticketDao.save(expected);
 
-        User actualUser = userDao.findById(userCountBeforeInsert + 1).orElse(null);
+        Ticket actual = ticketDao.findById(countBeforeInsert + 1).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), actualUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), actualUser.getLastName());
-        assertEquals(expectedUser.getEmail(), actualUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), actualUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), actualUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), actualUser.getRoleType());
-    }
-
-    @Test
-    public void findByEmail() {
-        int userCountBeforeInsert = (int) userDao.count();
-        User expectedUser = generateTestUser(userCountBeforeInsert + 1);
-        userDao.save(expectedUser);
-
-        User actualUser = userDao.findByEmail(expectedUser.getEmail()).orElse(null);
-
-        assertEquals(expectedUser, actualUser);
-        assertEquals(expectedUser.getFirstName(), expectedUser.getFirstName());
-        assertEquals(expectedUser.getLastName(), expectedUser.getLastName());
-        assertEquals(expectedUser.getEmail(), expectedUser.getEmail());
-        assertEquals(expectedUser.getPhoneNumber(), expectedUser.getPhoneNumber());
-        assertEquals(expectedUser.getPassword(), expectedUser.getPassword());
-        assertEquals(expectedUser.getRoleType(), expectedUser.getRoleType());
+        assertEquals(expected, actual);
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getDepartureStation(), actual.getDepartureStation());
+        assertEquals(expected.getDestinationStation(), actual.getDestinationStation());
+        assertEquals(expected.getPassengerName(), actual.getPassengerName());
+        assertEquals(expected.getPrice(), actual.getPrice());
+        assertEquals(expected.getFlightId(), actual.getFlightId());
+        assertEquals(expected.getSeatId(), actual.getSeatId());
+        assertEquals(expected.getUserId(), actual.getUserId());
+        assertEquals(expected.getBillId(), actual.getBillId());
     }
 
     @Test
@@ -141,15 +133,15 @@ public class UserDaoImplTest {
         int pageNumber = 1;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Ticket> tickets = generateListOfEntities(quantity);
+        tickets.forEach(ticketDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Ticket> actual = ticketDao.findAll(page);
+        List<Ticket> expected = tickets.stream()
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
-
+        System.out.println(actual);
         int expectedSize = calculateExpectedSize(pageNumber, itemPerPage, quantity);
 
         assertEquals(expected, actual);
@@ -164,12 +156,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 4;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Ticket> list = generateListOfEntities(quantity);
+        list.forEach(ticketDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Ticket> actual = ticketDao.findAll(page);
+        List<Ticket> expected = list.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -187,12 +179,12 @@ public class UserDaoImplTest {
         int pageNumber = 3;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Ticket> entities = generateListOfEntities(quantity);
+        entities.forEach(ticketDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Ticket> actual = ticketDao.findAll(page);
+        List<Ticket> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -210,12 +202,12 @@ public class UserDaoImplTest {
         int pageNumber = 2;
         int itemPerPage = 3;
 
-        List<User> users = generateListUser(quantity);
-        users.forEach(userDao::save);
+        List<Ticket> entities = generateListOfEntities(quantity);
+        entities.forEach(ticketDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
-        List<User> actual = userDao.findAll(page);
-        List<User> expected = users.stream()
+        List<Ticket> actual = ticketDao.findAll(page);
+        List<Ticket> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -227,46 +219,49 @@ public class UserDaoImplTest {
     }
 
     @Test
-    public void update() {
-        int userCountBeforeInsert = (int) userDao.count();
+    public void update() throws SQLException {
+        createTables(dataSource);
+        int userCountBeforeInsert = (int) ticketDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
+        Ticket testEntity = generateTestEntity(id);
+        ticketDao.save(testEntity);
 
-        int userCountAfterInsert = (int) userDao.count();
+        int countAfterInsert = (int) ticketDao.count();
 
-        User expectedUser = User.builder()
-                .withId(id)
-                .withFirstName("Михайло")
-                .withLastName("Клинобородий")
-                .withEmail("maximus@gmail.com")
-                .withPhoneNumber("+43457056578")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
+        Ticket expected = Ticket.builder()
+                .withId(1)
+                .withDepartureStation("Кривий РіГ")
+                .withDestinationStation("Житомир")
+                .withPassengerName("Аїда Антревепен")
+                .withPrice(new BigDecimal(500.00))
+                .withFlightId(5)
+                .withSeatId(25)
+                .withUserId(2)
+                .withBillId(3)
                 .build();
 
-        userDao.update(expectedUser);
-        int userCountAfterUpdate = (int) userDao.count();
-        User actualUser = userDao.findById(id).orElse(null);
+        ticketDao.update(expected);
+        int countAfterUpdate = (int) ticketDao.count();
+        Ticket actual = ticketDao.findById(id).orElse(null);
 
-        assertEquals(expectedUser, actualUser);
-        assertEquals(userCountAfterUpdate, userCountAfterInsert);
+        assertEquals(expected, actual);
+        assertEquals(countAfterUpdate, countAfterInsert);
     }
 
     @Test
     public void deleteById() {
-        int userCountBeforeInsert = (int) userDao.count();
+        int userCountBeforeInsert = (int) ticketDao.count();
         int id = userCountBeforeInsert + 1;
-        User testUser = generateTestUser(id);
-        userDao.save(testUser);
-        int beforeDeleteSize = (int) userDao.count();
+        Ticket testEntity = generateTestEntity(id);
+        ticketDao.save(testEntity);
+        int beforeDeleteSize = (int) ticketDao.count();
 
-        userDao.deleteById(id);
-        int actualSize = (int) userDao.count();
+        ticketDao.deleteById(id);
+        int actualSize = (int) ticketDao.count();
 
 
-        User actualUser = userDao.findById(id).orElse(null);
-        assertNull(actualUser);
+        Ticket actual = ticketDao.findById(id).orElse(null);
+        assertNull(actual);
         assertEquals(beforeDeleteSize - 1, actualSize);
         assertNotEquals(beforeDeleteSize, actualSize);
     }
@@ -274,7 +269,7 @@ public class UserDaoImplTest {
     @Test
     public void countShouldReturnZeroOnEmptyTable() throws SQLException {
         createTables(dataSource);
-        int actualCount = (int) userDao.count();
+        int actualCount = (int) ticketDao.count();
 
         assertEquals(0, actualCount);
     }
@@ -284,9 +279,9 @@ public class UserDaoImplTest {
         createTables(dataSource);
         int expected = 9;
 
-        List<User> users = generateListUser(expected);
-        users.forEach(userDao::save);
-        int actualCount = (int) userDao.count();
+        List<Ticket> entities = generateListOfEntities(expected);
+        entities.forEach(ticketDao::save);
+        int actualCount = (int) ticketDao.count();
         assertEquals(expected, actualCount);
     }
 

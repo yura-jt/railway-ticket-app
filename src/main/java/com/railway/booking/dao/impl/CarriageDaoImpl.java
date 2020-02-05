@@ -1,15 +1,12 @@
 package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
-import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Carriage;
 import com.railway.booking.entity.enums.CarriageType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Optional;
 
 public class CarriageDaoImpl extends AbstractCrudDaoImpl<Carriage> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM carriages WHERE id = ?";
@@ -22,37 +19,7 @@ public class CarriageDaoImpl extends AbstractCrudDaoImpl<Carriage> {
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM carriages";
 
     public CarriageDaoImpl(DatabaseConnector connector) {
-        super(connector);
-    }
-
-    @Override
-    public void save(Carriage entity) {
-        save(entity, SAVE_QUERY);
-    }
-
-    @Override
-    public Optional<Carriage> findById(Integer id) {
-        return findById(id, FIND_BY_ID_QUERY);
-    }
-
-    @Override
-    public List<Carriage> findAll(Page page) {
-        return findAll(page, FIND_ALL_QUERY);
-    }
-
-    @Override
-    public void update(Carriage entity) {
-        update(entity, UPDATE_QUERY);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        deleteById(id, DELETE_BY_ID_QUERY);
-    }
-
-    @Override
-    public long count() {
-        return count(COUNT_QUERY);
+        super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);
     }
 
     @Override
