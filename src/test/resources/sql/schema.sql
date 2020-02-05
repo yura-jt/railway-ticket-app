@@ -138,5 +138,6 @@ CREATE TABLE tariffs
     id            INT(10)     NOT NULL AUTO_INCREMENT,
     carriage_type VARCHAR(15) NOT NULL,
     rate          DECIMAL     NOT NULL,
-    CONSTRAINT tariffs_PK PRIMARY KEY (id)
+    CONSTRAINT tariffs_PK PRIMARY KEY (id),
+    CONSTRAINT tariffs_carriage_type_AK UNIQUE (carriage_type)
 );

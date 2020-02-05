@@ -1,7 +1,5 @@
 package com.railway.booking.entity;
 
-import com.railway.booking.entity.enums.OrderStatus;
-
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 

@@ -1,7 +1,5 @@
 package com.railway.booking.entity;
 
-import com.railway.booking.entity.enums.RoleType;
-
 import java.util.Objects;
 
 public class User {

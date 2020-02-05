@@ -1,4 +1,4 @@
-package com.railway.booking.entity.enums;
+package com.railway.booking.entity;
 
 public enum RoleType {
     PASSENGER, ADMIN

@@ -3,7 +3,7 @@ package com.railway.booking.dao.impl;
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.RoleType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

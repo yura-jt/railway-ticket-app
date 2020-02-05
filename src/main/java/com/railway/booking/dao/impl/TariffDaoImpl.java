@@ -1,21 +1,29 @@
 package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
+import com.railway.booking.dao.TariffDao;
+import com.railway.booking.entity.CarriageType;
 import com.railway.booking.entity.Tariff;
-import com.railway.booking.entity.enums.CarriageType;
 
 import java.math.BigDecimal;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
-public class TariffDaoImpl extends AbstractCrudDaoImpl<Tariff> {
+public class TariffDaoImpl extends AbstractCrudDaoImpl<Tariff> implements TariffDao {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM tariffs WHERE id = ?";
+    private static final String FIND_BY_CARRIAGE_TYPE_QUERY = "SELECT * FROM tariffs WHERE carriage_type = ?";
     private static final String SAVE_QUERY = "INSERT INTO tariffs (carriage_type, rate) VALUES (?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM tariffs LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY = "UPDATE tariffs SET carriage_type = ?, rate = ? where id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM tariffs WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM tariffs";
+
+    @Override
+    public Optional<Tariff> getTariffByCarriageType(CarriageType carriageType) {
+        return findByParam(carriageType, FIND_BY_CARRIAGE_TYPE_QUERY);
+    }
 
     public TariffDaoImpl(DatabaseConnector connector) {
         super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);

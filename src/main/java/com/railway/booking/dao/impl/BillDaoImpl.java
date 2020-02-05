@@ -2,7 +2,7 @@ package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.entity.Bill;
-import com.railway.booking.entity.enums.BillStatus;
+import com.railway.booking.entity.BillStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
