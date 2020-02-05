@@ -4,7 +4,6 @@ import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
-import com.railway.booking.dao.impl.Util.TestDatabase;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
 import com.railway.booking.entity.User;
 import com.railway.booking.entity.enums.RoleType;
@@ -26,14 +25,14 @@ import static org.junit.Assert.*;
 public class UserDaoImplTest {
     private static UserDao userDao;
     private static DatabaseConnector dataSource;
-    private static final String SCHEMA_SQL_PATH = "sql/schema.sql";
-    private static final String DATA_SQL_PATH = "sql/data.sql";
+    private static final String SCHEMA_SQL_PATH = "src/test/resources/sql/schema.sql";
+    private static final String DATA_SQL_PATH = "src/test/resources/sql/data.sql";
     private static final String CREATE_TABLES_QUERY = JdbcUtil.getSqlQueryStringFromFile(SCHEMA_SQL_PATH);
     private static final String GENERATE_DATA_QUERY = JdbcUtil.getSqlQueryStringFromFile(DATA_SQL_PATH);
 
     @BeforeClass
     public static void init() {
-        dataSource = new TestDatabaseConnector(TestDatabase.H2);
+        dataSource = new TestDatabaseConnector();
         userDao = new UserDaoImpl(dataSource);
     }
 
