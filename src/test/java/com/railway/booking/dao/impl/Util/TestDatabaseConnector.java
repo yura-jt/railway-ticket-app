@@ -11,35 +11,18 @@ import java.util.ResourceBundle;
 public class TestDatabaseConnector implements DatabaseConnector {
     private final HikariDataSource hikariDataSource;
 
-    private static final String H2_PROPERTIES_PATH = "db/test";
-    private static final String MYSQL_TEST_URL = "jdbc:mysql://localhost:3306/railway_test";
-    private static final String MYSQL_USERNAME = "test";
-    private static final String MYSQL_PASSWORD = "test";
+    private static final String CONFIG_PROPERTY_NAME = "test_config";
+    private static final String PROPERTIES_PATH_PREFIX = "db/";
+    private static final String PROPERTY_KEY = "db.vendor";
 
-    public TestDatabaseConnector(TestDatabase testDatabase) {
+
+    public TestDatabaseConnector() {
         hikariDataSource = new HikariDataSource();
-
-        if (testDatabase == TestDatabase.H2) {
-            setH2Config(hikariDataSource);
-        } else if (testDatabase == TestDatabase.MYSQL) {
-            setMySqlConfig(hikariDataSource);
-        }
+        ResourceBundle resourceBundle = getDatabaseConfiguration();
+        setDatabaseConfig(resourceBundle);
 
         hikariDataSource.setMinimumIdle(100);
         hikariDataSource.setMaximumPoolSize(2000);
-    }
-
-    private static void setH2Config(HikariDataSource dataSource) {
-        ResourceBundle resource = ResourceBundle.getBundle(H2_PROPERTIES_PATH);
-        dataSource.setJdbcUrl(resource.getString("db.url"));
-        dataSource.setUsername(resource.getString("db.user"));
-        dataSource.setPassword(resource.getString("db.password"));
-    }
-
-    private static void setMySqlConfig(HikariDataSource dataSource) {
-        dataSource.setJdbcUrl(MYSQL_TEST_URL);
-        dataSource.setUsername(MYSQL_USERNAME);
-        dataSource.setPassword(MYSQL_PASSWORD);
     }
 
     public Connection getConnection() {
@@ -48,5 +31,17 @@ public class TestDatabaseConnector implements DatabaseConnector {
         } catch (SQLException e) {
             throw new DatabaseSqlRuntimeException("Can not obtain connection to the database", e);
         }
+    }
+
+    private void setDatabaseConfig(ResourceBundle resource) {
+        hikariDataSource.setJdbcUrl(resource.getString("db.url"));
+        hikariDataSource.setUsername(resource.getString("db.user"));
+        hikariDataSource.setPassword(resource.getString("db.password"));
+    }
+
+    private ResourceBundle getDatabaseConfiguration() {
+        ResourceBundle appResource = ResourceBundle.getBundle(CONFIG_PROPERTY_NAME);
+        String settingFileName = PROPERTIES_PATH_PREFIX + appResource.getString(PROPERTY_KEY);
+        return ResourceBundle.getBundle(settingFileName);
     }
 }
