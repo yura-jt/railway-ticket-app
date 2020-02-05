@@ -64,12 +64,12 @@ public class TariffDaoImplTest {
         return new Tariff(1, CarriageType.LUX, new BigDecimal(451.15));
     }
 
-    private List<Tariff> generateListOfEntities(int quantity) {
+    private List<Tariff> generateListOfEntities() {
+        int quantity = CarriageType.values().length;
         List<Tariff> list = new ArrayList<>();
         for (int i = 0; i < quantity; i++) {
             int id = i + 1;
-            CarriageType carriageType = CarriageType.values()
-                    [ThreadLocalRandom.current().nextInt(0, CarriageType.values().length)];
+            CarriageType carriageType = CarriageType.values()[i];
             BigDecimal rate = new BigDecimal(35 + (i * 10));
             Tariff tariff = new Tariff((id), carriageType, rate);
             list.add(tariff);
@@ -78,7 +78,8 @@ public class TariffDaoImplTest {
     }
 
     @Test
-    public void saveShouldCorrectSaveUserToDatabase() {
+    public void saveShouldCorrectSaveUserToDatabase() throws SQLException {
+        createTables(dataSource);
         int countBeforeInsert = (int) tariffDao.count();
         Tariff expected = generateTestEntity(countBeforeInsert + 1);
 
@@ -107,16 +108,17 @@ public class TariffDaoImplTest {
     @Test
     public void findAllShouldReturnCorrectPagesForFirstPage() throws SQLException {
         createTables(dataSource);
-        int quantity = 9;
         int pageNumber = 1;
         int itemPerPage = 4;
 
-        List<Tariff> tariffs = generateListOfEntities(quantity);
-        tariffs.forEach(tariffDao::save);
+        List<Tariff> entities = generateListOfEntities();
+        int quantity = entities.size();
+
+        entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
         List<Tariff> actual = tariffDao.findAll(page);
-        List<Tariff> expected = tariffs.stream()
+        List<Tariff> expected = entities.stream()
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
 
@@ -130,16 +132,16 @@ public class TariffDaoImplTest {
     @Test
     public void findAllShouldReturnCorrectPagesForLastPageWhenItsNotFull() throws SQLException {
         createTables(dataSource);
-        int quantity = 9;
-        int pageNumber = 3;
-        int itemPerPage = 4;
+        int pageNumber = 2;
+        int itemPerPage = 2;
 
-        List<Tariff> list = generateListOfEntities(quantity);
-        list.forEach(tariffDao::save);
+        List<Tariff> entities = generateListOfEntities();
+        int quantity = entities.size();
+        entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
         List<Tariff> actual = tariffDao.findAll(page);
-        List<Tariff> expected = list.stream()
+        List<Tariff> expected = entities.stream()
                 .skip((pageNumber - 1) * itemPerPage)
                 .limit(itemPerPage)
                 .collect(Collectors.toList());
@@ -153,11 +155,11 @@ public class TariffDaoImplTest {
     @Test
     public void findAllShouldReturnCorrectPagesForLastPageWhenItIsFull() throws SQLException {
         createTables(dataSource);
-        int quantity = 9;
         int pageNumber = 3;
-        int itemPerPage = 3;
+        int itemPerPage = 1;
 
-        List<Tariff> entities = generateListOfEntities(quantity);
+        List<Tariff> entities = generateListOfEntities();
+        int quantity = entities.size();
         entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
@@ -176,11 +178,11 @@ public class TariffDaoImplTest {
     @Test
     public void findAllShouldReturnCorrectPagesForMiddlePage() throws SQLException {
         createTables(dataSource);
-        int quantity = 9;
-        int pageNumber = 2;
-        int itemPerPage = 3;
+        int pageNumber = 1;
+        int itemPerPage = 2;
 
-        List<Tariff> entities = generateListOfEntities(quantity);
+        List<Tariff> entities = generateListOfEntities();
+        int quantity = entities.size();
         entities.forEach(tariffDao::save);
 
         Page page = new Page(pageNumber, itemPerPage);
@@ -217,7 +219,8 @@ public class TariffDaoImplTest {
     }
 
     @Test
-    public void deleteById() {
+    public void deleteById() throws SQLException {
+        createTables(dataSource);
         int userCountBeforeInsert = (int) tariffDao.count();
         int id = userCountBeforeInsert + 1;
         Tariff testEntity = generateTestEntity(id);
@@ -245,9 +248,10 @@ public class TariffDaoImplTest {
     @Test
     public void countShouldReturnValidValueOnFilledTable() throws SQLException {
         createTables(dataSource);
-        int expected = 9;
 
-        List<Tariff> entities = generateListOfEntities(expected);
+        List<Tariff> entities = generateListOfEntities();
+        int expected = entities.size();
+
         entities.forEach(tariffDao::save);
         int actualCount = (int) tariffDao.count();
         assertEquals(expected, actualCount);
