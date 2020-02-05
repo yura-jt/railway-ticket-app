@@ -1,7 +1,5 @@
 package com.railway.booking.entity;
 
-import com.railway.booking.entity.enums.BillStatus;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

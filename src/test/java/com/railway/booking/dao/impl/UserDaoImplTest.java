@@ -6,7 +6,7 @@ import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
 import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.RoleType;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

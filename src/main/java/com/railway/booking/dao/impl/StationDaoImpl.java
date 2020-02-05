@@ -4,7 +4,7 @@ import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.StationDao;
 import com.railway.booking.dao.exception.DatabaseSqlRuntimeException;
 import com.railway.booking.entity.Station;
-import com.railway.booking.entity.enums.StationType;
+import com.railway.booking.entity.StationType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +24,6 @@ public class StationDaoImpl extends AbstractCrudDaoImpl<Station> implements Stat
             "train_id = ? where id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM stations WHERE id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM stations";
-    private static final Integer PAGINATION_STATION_LIMIT = 1_000;
 
     public StationDaoImpl(DatabaseConnector connector) {
         super(connector, FIND_BY_ID_QUERY, SAVE_QUERY, FIND_ALL_QUERY, UPDATE_QUERY, DELETE_BY_ID_QUERY, COUNT_QUERY);

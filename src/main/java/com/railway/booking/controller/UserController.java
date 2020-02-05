@@ -2,7 +2,7 @@ package com.railway.booking.controller;
 
 import com.railway.booking.context.ApplicationInjector;
 import com.railway.booking.entity.User;
-import com.railway.booking.entity.enums.RoleType;
+import com.railway.booking.entity.RoleType;
 import com.railway.booking.service.UserService;
 
 import javax.servlet.ServletException;

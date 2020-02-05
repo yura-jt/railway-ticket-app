@@ -1,7 +1,5 @@
 package com.railway.booking.entity;
 
-import com.railway.booking.entity.enums.SeatStatus;
-
 public class Seat {
     private final Integer billId;
     private final Integer number;

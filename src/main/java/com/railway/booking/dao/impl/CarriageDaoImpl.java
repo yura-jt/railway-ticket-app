@@ -2,7 +2,7 @@ package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.entity.Carriage;
-import com.railway.booking.entity.enums.CarriageType;
+import com.railway.booking.entity.CarriageType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

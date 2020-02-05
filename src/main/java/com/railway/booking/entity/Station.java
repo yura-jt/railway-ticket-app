@@ -1,7 +1,5 @@
 package com.railway.booking.entity;
 
-import com.railway.booking.entity.enums.StationType;
-
 import java.time.LocalTime;
 import java.util.Objects;
 
