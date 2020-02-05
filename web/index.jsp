@@ -4,6 +4,6 @@
     <title>$Title$</title>
   </head>
   <body>
-  Railway tickets booking app
+    Railway tickets booking app
   </body>
 </html>
