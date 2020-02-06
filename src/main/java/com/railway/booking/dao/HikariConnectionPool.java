@@ -31,7 +31,7 @@ public class HikariConnectionPool implements DatabaseConnector {
     }
 
     private ResourceBundle getDatabaseConfiguration() {
-        ResourceBundle appResource = ResourceBundle.getBundle("app.properties");
+        ResourceBundle appResource = ResourceBundle.getBundle("app");
         String databaseVendorProperty = "db/" + appResource.getString("db.mode");
         return ResourceBundle.getBundle(databaseVendorProperty);
     }
