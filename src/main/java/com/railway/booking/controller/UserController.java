@@ -1,34 +1,38 @@
 package com.railway.booking.controller;
 
+import com.railway.booking.command.Command;
+import com.railway.booking.command.user.LoginCommand;
+import com.railway.booking.command.user.LogoutCommand;
+import com.railway.booking.command.user.RegistrationCommand;
 import com.railway.booking.context.ApplicationInjector;
-import com.railway.booking.entity.User;
-import com.railway.booking.entity.RoleType;
-import com.railway.booking.service.UserService;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class UserController extends HttpServlet {
-    private final UserService userService;
+    private final Map<String, Command> commands;
 
     public UserController() {
-        ApplicationInjector injector = ApplicationInjector.getInstance();
-        this.userService = injector.getUserService();
+        commands = new HashMap<>();
+        commands.put("login", new LoginCommand(ApplicationInjector.getUserService()));
+        commands.put("logout", new LogoutCommand(ApplicationInjector.getUserService()));
+        commands.put("registration", new RegistrationCommand(ApplicationInjector.getUserService()));
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final User user = (User) req.getSession().getAttribute("user");
-        if (user.getRoleType() != RoleType.ADMIN) {
-            req.getRequestDispatcher("view/login.jsp").forward(req, resp);
-        }
-        final List<User> users = userService.findAll(1);
-        req.setAttribute("users", users);
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response) {
+        Command command = getCommand(request);
+        command.execute(request, response);
+    }
 
-        req.getRequestDispatcher("view/users.jsp").forward(req, resp);
+
+    private Command getCommand(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        path = path.replaceAll(".*/", "");
+        return commands.get(path);
     }
 }

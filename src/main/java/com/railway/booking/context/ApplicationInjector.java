@@ -72,4 +72,20 @@ public class ApplicationInjector {
     public static UserService getUserService() {
         return USER_SERVICE;
     }
+
+    public static TrainService getTrainService() {
+        return TRAIN_SERVICE;
+    }
+
+    public static TariffService getTariffService() {
+        return TARIFF_SERVICE;
+    }
+
+    public static OrderService getOrderService() {
+        return ORDER_SERVICE;
+    }
+
+    public static BillService getBillService() {
+        return BILL_SERVICE;
+    }
 }
