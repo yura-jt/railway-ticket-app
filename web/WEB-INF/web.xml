@@ -4,12 +4,12 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <servlet>
-        <servlet-name>userController</servlet-name>
-        <servlet-class>com.railway.booking.controller.UserController</servlet-class>
+        <servlet-name>FrontController</servlet-name>
+        <servlet-class>com.railway.booking.controller.FrontController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>userController</servlet-name>
+        <servlet-name>FrontController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
@@ -27,7 +27,7 @@
     </filter>
     <filter-mapping>
         <filter-name>InternalizationFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/</url-pattern>
     </filter-mapping>
 
     <filter>

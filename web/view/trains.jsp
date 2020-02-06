@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Employees</title>
+    <title>railway-ticket-booking/train-schedule</title>
 </head>
 <body>
 <table border="1" cellpadding="5" cellspacing="5">

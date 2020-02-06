@@ -11,6 +11,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <servlet.version>4.0.0</servlet.version>
+        <jstl.version>1.2</jstl.version>
     </properties>
 
     <build>
@@ -45,13 +47,13 @@
             </plugin>
         </plugins>
         <resources>
-        <resource>
-            <directory>src/main/resources</directory>
-        </resource>
-        <resource>
-            <directory>src/test/resources</directory>
-        </resource>
-    </resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>src/test/resources</directory>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>

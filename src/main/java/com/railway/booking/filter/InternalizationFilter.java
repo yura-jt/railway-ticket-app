@@ -1,7 +1,5 @@
 package com.railway.booking.filter;
 
-import com.railway.booking.entity.User;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,10 +15,21 @@ public class InternalizationFilter implements Filter {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
 
         String localeName = servletRequest.getParameter("lang");
-        if (localeName != null) {
-            request.getSession().setAttribute("lang", localeName);
+        if (!isValidLangParam(localeName)) {
+            localeName = "en";
         }
+        request.getSession().setAttribute("lang", localeName);
 
         filterChain.doFilter(request, servletResponse);
+    }
+
+    private boolean isValidLangParam(String localeName) {
+        if (localeName == null) {
+            return false;
+        }
+        if (localeName.equals("en") || localeName.equals("ru") || localeName.equals("ua")) {
+            return true;
+        }
+        return false;
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <link href="https://fonts.googleapis.com/css?family=Ropa+Sans" rel="stylesheet">
     <style>
-        <%@ include file="/access_denied.css" %>
+        <%@ include file="/css/access_denied.css" %>
     </style>
 </head>
 <body>
