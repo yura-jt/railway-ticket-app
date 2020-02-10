@@ -29,8 +29,8 @@ import static org.junit.Assert.assertNotNull;
 public class StationDaoImplTest {
     private static StationDao stationDao;
     private static DatabaseConnector dataSource;
-    private static final String SCHEMA_SQL_PATH = "src/test/resources/sql/schema.sql";
-    private static final String DATA_SQL_PATH = "src/test/resources/sql/data.sql";
+    private static final String SCHEMA_SQL_PATH = "src/test/resources/db/sql/schema.sql";
+    private static final String DATA_SQL_PATH = "src/test/resources/db/sql/data.sql";
     private static final String CREATE_TABLES_QUERY = JdbcUtil.getSqlQueryStringFromFile(SCHEMA_SQL_PATH);
     private static final String GENERATE_DATA_QUERY = JdbcUtil.getSqlQueryStringFromFile(DATA_SQL_PATH);
     private static final String INSERT_TRAIN_QUERY = "INSERT INTO trains (code, name) " +

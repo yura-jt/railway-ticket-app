@@ -15,10 +15,11 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
+    private static final int USER_PER_PAGE = 5;
+
     private final PasswordEncryptor passwordEncryptor;
     private final UserDao userDao;
     private final UserValidator userValidator;
-    private static final int USER_PER_PAGE = 5;
 
 
     public UserServiceImpl(UserDao userDao, UserValidator userValidator, PasswordEncryptor passwordEncryptor) {
@@ -34,8 +35,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (userDao.findByEmail(user.getEmail()).isPresent()) {
-            String message = String.format("User with such e-mail: %s is already exist", user.getEmail());
-            LOGGER.warn(message);
+            LOGGER.warn(String.format("User with such e-mail: %s is already exist", user.getEmail()));
             return false;
         }
         String encodedPassword = passwordEncryptor.encrypt(user.getPassword());
@@ -55,15 +55,15 @@ public class UserServiceImpl implements UserService {
         user = userDao.findByEmail(email).orElse(null);
 
         if (user == null || !user.getPassword().equals(encryptPassword)) {
-            String message = String.format("User with email: %s is not registered or password is not correct", email);
-            LOGGER.warn(message);
+            LOGGER.warn(String.format("User with email: %s is not registered or password is not correct", email));
             user = null;
         }
         return user;
     }
 
     @Override
-    public List<User> findAll(int pageNumber) {
+    public List<User> findAll(String page) {
+        int pageNumber = parsePage(page);
         int maxPage = getMaxPage();
         if (pageNumber <= 0) {
             pageNumber = 1;
@@ -78,11 +78,6 @@ public class UserServiceImpl implements UserService {
     public User findById(Integer id) {
         userValidator.validateId(id);
         return userDao.findById(id).orElse(null);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-        return userDao.findByEmail(email).orElse(null);
     }
 
     private int getMaxPage() {
@@ -103,9 +98,18 @@ public class UserServiceImpl implements UserService {
                     .build());
             isValid = true;
         } catch (ValidateException e) {
-            String message = String.format("Credentials, provided for email: %s are not valid ", email);
-            LOGGER.warn(message);
+            LOGGER.warn(String.format("Credentials, provided for email: %s are not valid ", email));
         }
         return isValid;
+    }
+
+    private int parsePage(String pageNumber) {
+        int page = 1;
+        try {
+            page = Integer.parseInt(pageNumber);
+        } catch (NumberFormatException e) {
+            LOGGER.warn(String.format("Can not parse page number from string: %s", pageNumber));
+        }
+        return page;
     }
 }

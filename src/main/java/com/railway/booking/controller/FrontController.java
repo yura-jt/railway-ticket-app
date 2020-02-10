@@ -1,7 +1,7 @@
 package com.railway.booking.controller;
 
 import com.railway.booking.command.Command;
-import com.railway.booking.command.CommandHelper;
+import com.railway.booking.command.CommandProvider;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,10 +14,10 @@ import java.io.IOException;
 public class FrontController extends HttpServlet {
     private static final Logger LOGGER = LogManager.getLogger(FrontController.class);
 
-    private final CommandHelper commandHelper;
+    private final CommandProvider commandProvider;
 
     public FrontController() {
-        commandHelper = new CommandHelper();
+        commandProvider = new CommandProvider();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class FrontController extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Command command = commandHelper.getCommand(request.getRequestURI());
+        Command command = commandProvider.getCommand(request.getRequestURI());
         String page = command.execute(request, response);
 
         request.getRequestDispatcher(page).forward(request, response);

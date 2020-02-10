@@ -19,12 +19,12 @@ import java.util.function.BiConsumer;
 public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     private static final Logger LOGGER = LogManager.getLogger(AbstractCrudDaoImpl.class);
 
-    private final String FIND_BY_ID_QUERY;
-    private final String SAVE_QUERY;
-    private final String FIND_ALL_QUERY;
-    private final String UPDATE_QUERY;
-    private final String DELETE_BY_ID_QUERY;
-    private final String COUNT_QUERY;
+    private final String findByIdQuery;
+    private final String saveQuery;
+    private final String findAllQuery;
+    private final String updateQuery;
+    private final String deleteByIdQuery;
+    private final String countQuery;
 
     private static final BiConsumer<PreparedStatement, Object> OBJ_PARAM_SETTER = (preparedStatement, object) -> {
         try {
@@ -39,18 +39,18 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     protected AbstractCrudDaoImpl(DatabaseConnector connector, String findByIdQuery, String saveQuery, String findAllQuery,
                                   String updateQuery, String deleteByIdQuery, String countQuery) {
         this.connector = connector;
-        FIND_BY_ID_QUERY = findByIdQuery;
-        SAVE_QUERY = saveQuery;
-        FIND_ALL_QUERY = findAllQuery;
-        UPDATE_QUERY = updateQuery;
-        DELETE_BY_ID_QUERY = deleteByIdQuery;
-        COUNT_QUERY = countQuery;
+        this.findByIdQuery = findByIdQuery;
+        this.saveQuery = saveQuery;
+        this.findAllQuery = findAllQuery;
+        this.updateQuery = updateQuery;
+        this.deleteByIdQuery = deleteByIdQuery;
+        this.countQuery = countQuery;
     }
 
     public List<E> findAll(Page page) {
         int limit = page.getItemsPerPage();
         int offset = (page.getPageNumber() - 1) * limit;
-        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(FIND_ALL_QUERY)) {
+        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(findAllQuery)) {
             preparedStatement.setObject(1, limit);
             preparedStatement.setObject(2, offset);
             try (final ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -70,12 +70,12 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
 
     public boolean save(E entity) {
         boolean isSaved = false;
-        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(SAVE_QUERY)) {
+        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(saveQuery)) {
             insert(preparedStatement, entity);
             preparedStatement.execute();
             isSaved = true;
         } catch (SQLException e) {
-            String message = String.format("Fail to execute next query: %s", SAVE_QUERY);
+            String message = String.format("Fail to execute next query: %s", saveQuery);
             LOGGER.warn(message, e);
             throw new DatabaseSqlRuntimeException(message, e);
         }
@@ -83,23 +83,23 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     }
 
     public void update(E entity) {
-        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(UPDATE_QUERY)) {
+        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(updateQuery)) {
             update(preparedStatement, entity);
             int rowAffected = preparedStatement.executeUpdate();
             if (rowAffected == 0) {
-                String message = (String.format("Failed to update entity for query: \"%s\"", UPDATE_QUERY));
+                String message = (String.format("Failed to update entity for query: \"%s\"", updateQuery));
                 LOGGER.warn(message);
                 throw new DatabaseSqlRuntimeException(message);
             }
         } catch (SQLException e) {
-            String message = String.format("Fail to execute next query: %s", UPDATE_QUERY);
+            String message = String.format("Fail to execute next query: %s", updateQuery);
             LOGGER.warn(message, e);
             throw new DatabaseSqlRuntimeException(message, e);
         }
     }
 
     public Optional<E> findById(Integer id) {
-        return findByParam(id, FIND_BY_ID_QUERY);
+        return findByParam(id, findByIdQuery);
     }
 
     public <P> Optional<E> findByParam(P param, String findByParam) {
@@ -117,7 +117,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     }
 
     public void deleteById(Integer id) {
-        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(DELETE_BY_ID_QUERY)) {
+        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(deleteByIdQuery)) {
             OBJ_PARAM_SETTER.accept(preparedStatement, id);
             preparedStatement.execute();
         } catch (SQLException e) {
@@ -130,7 +130,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     public long count() {
         long result = 0L;
         try (final Statement statement = connector.getConnection().createStatement()) {
-            statement.execute(COUNT_QUERY);
+            statement.execute(countQuery);
             try (final ResultSet resultSet = statement.getResultSet()) {
                 if (resultSet.next()) {
                     result = resultSet.getLong(1);
@@ -139,7 +139,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
         } catch (SQLException e) {
             LOGGER.warn(e);
             throw new DatabaseSqlRuntimeException(
-                    String.format("Fail to execute query: \"%s\"", COUNT_QUERY), e);
+                    String.format("Fail to execute query: \"%s\"", countQuery), e);
         }
         return result;
     }

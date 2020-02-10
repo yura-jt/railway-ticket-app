@@ -1,5 +1,12 @@
 package com.railway.booking.context;
 
+import com.railway.booking.command.Command;
+import com.railway.booking.command.user.LoginCommand;
+import com.railway.booking.command.user.LoginFormCommand;
+import com.railway.booking.command.user.LogoutCommand;
+import com.railway.booking.command.user.ProfileCommand;
+import com.railway.booking.command.user.RegistrationCommand;
+import com.railway.booking.command.user.RegistrationForm;
 import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.HikariConnectionPool;
@@ -30,6 +37,9 @@ import com.railway.booking.service.validator.TariffValidator;
 import com.railway.booking.service.validator.TrainValidator;
 import com.railway.booking.service.validator.UserValidator;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ApplicationInjector {
     private static ApplicationInjector applicationInjector;
 
@@ -54,6 +64,17 @@ public class ApplicationInjector {
     private static final TariffService TARIFF_SERVICE = new TariffServiceImpl(TARIFF_DAO, TARIFF_VALIDATOR);
     private static final OrderService ORDER_SERVICE = new OrderServiceImpl(ORDER_DAO, ORDER_VALIDATOR);
     private static final BillService BILL_SERVICE = new BillServiceImpl(BILL_DAO, BILL_VALIDATOR);
+
+    private static final Map<String, Command> COMMANDS = new HashMap<>();
+
+    static {
+        COMMANDS.put("login", new LoginCommand(USER_SERVICE));
+        COMMANDS.put("logout", new LogoutCommand(USER_SERVICE));
+        COMMANDS.put("registration", new RegistrationCommand(USER_SERVICE));
+        COMMANDS.put("registrationForm", new RegistrationForm());
+        COMMANDS.put("loginForm", new LoginFormCommand());
+        COMMANDS.put("profile", new ProfileCommand());
+    }
 
     private ApplicationInjector() {
     }
@@ -87,5 +108,9 @@ public class ApplicationInjector {
 
     public static BillService getBillService() {
         return BILL_SERVICE;
+    }
+
+    public static Map<String, Command> getCommands() {
+        return COMMANDS;
     }
 }

@@ -47,26 +47,18 @@ public class UserServiceImplTest {
     private static final String INCORRECT_PASSWORD = "INCORRECT_PASSWORD";
     private static final String ENCODE_INCORRECT_PASSWORD = "encode_incorrect_password";
 
-    private static final User USER = User.builder()
-            .withId(USER_ID)
-            .withFirstName(FIRST_NAME)
-            .withLastName(LAST_NAME)
-            .withEmail(USER_EMAIL)
-            .withPhoneNumber(PHONE_NUMBER)
-            .withPassword(PASSWORD)
-            .withRoleType(ROLE_TYPE)
-            .build();
-
-    @Mock
-    private UserDao userDao;
-    @Mock
-    private PasswordEncryptor passwordEncryptor;
-    @Mock
-    private UserValidator userValidator;
+    private static final User USER = initUser();
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
+    @Mock
+    private UserDao userDao;
+
+    @Mock
+    private PasswordEncryptor passwordEncryptor;
+    @Mock
+    private UserValidator userValidator;
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -172,7 +164,7 @@ public class UserServiceImplTest {
     public void findByEmailShouldReturnSavedUser() {
         when(userDao.findByEmail(USER_EMAIL)).thenReturn(Optional.of(USER));
 
-        final User actual = userService.findByEmail(USER_EMAIL);
+        final User actual = userDao.findByEmail(USER_EMAIL).orElse(null);
         assertEquals(USER, actual);
         verify(userDao).findByEmail(USER_EMAIL);
     }
@@ -182,7 +174,7 @@ public class UserServiceImplTest {
         userService.register(USER);
         when(userDao.findByEmail("1@mail")).thenReturn(Optional.empty());
 
-        final User actual = userService.findByEmail("1@mail");
+        final User actual = userDao.findByEmail("1@mail").orElse(null);
         assertNull(actual);
         verify(userDao).findByEmail("1@mail");
     }
@@ -191,7 +183,19 @@ public class UserServiceImplTest {
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
         when(userDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
-        final List<User> actual = userService.findAll(1);
+        final List<User> actual = userService.findAll("1");
         assertEquals(Collections.EMPTY_LIST, actual);
+    }
+
+    private static User initUser() {
+        return User.builder()
+                .withId(USER_ID)
+                .withFirstName(FIRST_NAME)
+                .withLastName(LAST_NAME)
+                .withEmail(USER_EMAIL)
+                .withPhoneNumber(PHONE_NUMBER)
+                .withPassword(PASSWORD)
+                .withRoleType(ROLE_TYPE)
+                .build();
     }
 }

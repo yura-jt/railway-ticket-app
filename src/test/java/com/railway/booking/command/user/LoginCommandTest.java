@@ -1,9 +1,8 @@
 package com.railway.booking.command.user;
 
-import com.railway.booking.controller.FrontController;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
-import com.railway.booking.service.impl.UserServiceImpl;
+import com.railway.booking.service.UserService;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,17 +46,14 @@ public class LoginCommandTest {
     private HttpServletResponse response;
 
     @Mock
-    private FrontController frontController;
-
-    @Mock
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @InjectMocks
     private LoginCommand loginCommand;
 
     @After
     public void resetMocks() {
-        reset(request, response, frontController, userService);
+        reset(request, response, userService);
     }
 
     @Test
@@ -66,9 +62,6 @@ public class LoginCommandTest {
         when(request.getParameter("password")).thenReturn(EXISTED_PASSWORD);
         HttpSession httpSession = mock(HttpSession.class);
         when(request.getSession()).thenReturn(httpSession);
-        doNothing().when(httpSession).setAttribute(eq("user"), any());
-        doNothing().when(httpSession).setAttribute(eq("email"), any());
-        doNothing().when(httpSession).setAttribute(eq("role"), any());
 
         when(userService.login(EXISTED_EMAIL, EXISTED_PASSWORD)).thenReturn(USER);
 
