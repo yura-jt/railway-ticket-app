@@ -25,27 +25,26 @@ public class LoginCommand implements Command {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        if (email == null || password == null) {
-            return "view/login.jsp";
-        }
         User user = getLoggedUser(email, password);
+
         if (user == null) {
             return "view/login.jsp";
         }
 
-        setUserAndRoleToSession(request, user.getRoleType(), email);
+        setUserAndRoleToSession(request, user, email);
+
         if (user.getRoleType() == RoleType.ADMIN) {
             return "view/admin.jsp";
         } else {
-            return "view/access_denied.jsp";
+            return "view/profile.jsp";
         }
     }
 
-    private void setUserAndRoleToSession(HttpServletRequest request,
-                                         RoleType role, String email) {
+    private void setUserAndRoleToSession(HttpServletRequest request, User user, String email) {
         HttpSession session = request.getSession();
+        session.setAttribute("user", user);
         session.setAttribute("email", email);
-        session.setAttribute("role", role);
+        session.setAttribute("role", user.getRoleType());
     }
 
     private User getLoggedUser(String email, String password) {

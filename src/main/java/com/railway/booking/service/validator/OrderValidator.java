@@ -8,8 +8,15 @@ public class OrderValidator implements Validator<Order> {
     private static final Logger LOGGER = LogManager.getLogger(OrderValidator.class);
 
     @Override
-    public void validate(Order entity) {
-        validateId(entity.getId());
+    public boolean isValid(Order entity) {
+        boolean isValid = false;
+        try {
+            validateId(entity.getId());
+            isValid = true;
+        } catch (ValidateException e) {
+            LOGGER.warn("Order entity validation exception occurred");
+        }
+        return isValid;
     }
 
     @Override

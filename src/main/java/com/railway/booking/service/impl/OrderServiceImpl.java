@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void update(Order order) {
-        orderValidator.validate(order);
+        orderValidator.isValid(order);
 
     }
 

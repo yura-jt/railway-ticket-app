@@ -5,9 +5,8 @@ import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.User;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.UserService;
-import com.railway.booking.service.exception.EntityAlreadyExistException;
-import com.railway.booking.service.exception.EntityNotFoundException;
 import com.railway.booking.service.validator.UserValidator;
+import com.railway.booking.service.validator.ValidateException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,28 +28,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(User user) {
-        userValidator.validate(user);
+    public boolean register(User user) {
+        if (!userValidator.isValid(user)) {
+            return false;
+        }
 
         if (userDao.findByEmail(user.getEmail()).isPresent()) {
-            String message = String.format("User with such e-mail: %s is absent", user.getEmail());
+            String message = String.format("User with such e-mail: %s is already exist", user.getEmail());
             LOGGER.warn(message);
-            throw new EntityAlreadyExistException(message);
+            return false;
         }
-        userDao.save(user);
+        String encodedPassword = passwordEncryptor.encrypt(user.getPassword());
+        User userToPersist = User.builder(user).withPassword(encodedPassword).build();
+
+        return userDao.save(userToPersist);
     }
 
     @Override
     public User login(String email, String password) {
-        validateCredentials(email, password);
-        String encryptPassword = passwordEncryptor.encrypt(password);
+        User user = null;
+        if (!isValidCredentials(email, password)) {
+            return user;
+        }
 
-        User user = userDao.findByEmail(email).orElse(null);
+        String encryptPassword = passwordEncryptor.encrypt(password);
+        user = userDao.findByEmail(email).orElse(null);
 
         if (user == null || !user.getPassword().equals(encryptPassword)) {
             String message = String.format("User with email: %s is not registered or password is not correct", email);
             LOGGER.warn(message);
-            throw new EntityNotFoundException(message);
+            user = null;
         }
         return user;
     }
@@ -87,10 +94,18 @@ public class UserServiceImpl implements UserService {
         return page == 0 ? 1 : page;
     }
 
-    private void validateCredentials(String email, String password) {
-        userValidator.validate(User.builder()
-                .withEmail(email)
-                .withPassword(password)
-                .build());
+    private boolean isValidCredentials(String email, String password) {
+        boolean isValid = false;
+        try {
+            userValidator.isValid(User.builder()
+                    .withEmail(email)
+                    .withPassword(password)
+                    .build());
+            isValid = true;
+        } catch (ValidateException e) {
+            String message = String.format("Credentials, provided for email: %s are not valid ", email);
+            LOGGER.warn(message);
+        }
+        return isValid;
     }
 }

@@ -10,9 +10,16 @@ public class TariffValidator implements Validator<Tariff> {
     private static final Logger LOGGER = LogManager.getLogger(TariffValidator.class);
 
     @Override
-    public void validate(Tariff entity) {
-        validateId(entity.getId());
-        validateRate(entity.getRate());
+    public boolean isValid(Tariff entity) {
+        boolean isValid = false;
+        try {
+            validateId(entity.getId());
+            validateRate(entity.getRate());
+            isValid = true;
+        } catch (ValidateException e) {
+            LOGGER.warn("Tariff entity validation exception occurred");
+        }
+        return isValid;
     }
 
     @Override

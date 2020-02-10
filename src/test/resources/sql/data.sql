@@ -1,7 +1,7 @@
 INSERT INTO users (first_name, last_name, email, phone_number, password, role_type)
-VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'passenger'),
-       ('Jobe', 'Smith', 'lawnmower@gmail.com', '+380509998877', 'passwordT2', 'admin'),
-       ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'admin', 'admin');
+VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'PASSENGER'),
+       ('Jobe', 'Smith', 'lawnmower@gmail.com', '+380509998877', 'passwordT2', 'ADMIN'),
+       ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'admin', 'ADMIN');
 
 INSERT INTO tickets (departure_station, destination_station, passenger_name, price, flight_id,
                      seat_id, user_id, bill_id, created_on)

@@ -26,14 +26,14 @@ public class TariffServiceImpl implements TariffService {
 
     @Override
     public void update(Tariff tariff) {
-        tariffValidator.validate(tariff);
+        tariffValidator.isValid(tariff);
         tariffDao.update(tariff);
     }
 
     @Override
     public BigDecimal getRate(CarriageType carriageType) {
         Tariff tariff = tariffDao.getTariffByCarriageType(carriageType).orElse(null);
-        tariffValidator.validate(tariff);
+        tariffValidator.isValid(tariff);
         return tariff.getRate();
     }
 

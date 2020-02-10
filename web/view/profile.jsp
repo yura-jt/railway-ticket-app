@@ -26,7 +26,7 @@
                 <li><a href="#"><fmt:message key="profile.tran.schedule" /></a></li>
                 <li><a href="#"><fmt:message key="profile.my.tickets" /></a></li>
                 <li><a href="#"><fmt:message key="profile.my.bills" /></a></li>
-                <li><a href="#"><fmt:message key="profile.log.out" /></a></li>
+                <li><a href="logout"><fmt:message key="profile.log.out" /></a></li>
             </ul>
         </div> <!-- /#admin-sidebar -->
         <div id="admin-main-control" class="col-md-10 p-x-3 p-y-1">
@@ -39,9 +39,9 @@
         <div id="main-control" class="col-md-10 p-x-3 p-y-5">
             <div class="content-title m-x-auto">
                 <ul>
-                    <li><a href="?lang=en"><fmt:message key="switch.en" /></a></li>
-                    <li><a href="?lang=ua"><fmt:message key="switch.ua" /></a></li>
-                    <li><a href="?lang=ru"><fmt:message key="switch.ru" /></a></li>
+                    <li><a href="profile?lang=en"><fmt:message key="switch.en" /></a></li>
+                    <li><a href="profile?lang=ua"><fmt:message key="switch.ua" /></a></li>
+                    <li><a href="profile?lang=ru"><fmt:message key="switch.ru" /></a></li>
                 </ul>
             </div>
             </p>

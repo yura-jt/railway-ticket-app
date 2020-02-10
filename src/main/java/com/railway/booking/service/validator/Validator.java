@@ -2,7 +2,7 @@ package com.railway.booking.service.validator;
 
 public interface Validator<E> {
 
-    void validate(E entity);
+    boolean isValid(E entity);
 
     void validateId(Integer id);
 }

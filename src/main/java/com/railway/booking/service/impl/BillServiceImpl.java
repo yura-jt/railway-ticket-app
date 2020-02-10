@@ -23,7 +23,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void payBill(Bill bill) {
-        billValidator.validate(bill);
+        billValidator.isValid(bill);
         Bill newBill = Bill.builder()
                 .withUser(bill.getUser())
                 .withPrice(bill.getPrice())
@@ -34,7 +34,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void update(Bill bill) {
-        billValidator.validate(bill);
+        billValidator.isValid(bill);
         billDao.update(bill);
     }
 

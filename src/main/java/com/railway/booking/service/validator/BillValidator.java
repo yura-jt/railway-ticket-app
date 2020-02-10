@@ -10,8 +10,15 @@ public class BillValidator implements Validator<Bill> {
     private static final Logger LOGGER = LogManager.getLogger(OrderValidator.class);
 
     @Override
-    public void validate(Bill entity) {
-        validatePrice(entity.getPrice());
+    public boolean isValid(Bill entity) {
+        boolean isValid = false;
+        try {
+            validateId(entity.getOrderId());
+            isValid = true;
+        } catch (ValidateException e) {
+            LOGGER.warn("Bill entity validation exception occurred");
+        }
+        return isValid;
     }
 
     private void validatePrice(BigDecimal price) {

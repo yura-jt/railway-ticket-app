@@ -92,6 +92,15 @@ public class User {
         return new Builder();
     }
 
+    public static Builder builder(User user) {
+        return new Builder().withId(user.getId())
+                .withFirstName(user.getFirstName())
+                .withLastName(user.getLastName())
+                .withEmail(user.getEmail())
+                .withPhoneNumber(user.getPhoneNumber())
+                .withRoleType(user.getRoleType());
+    }
+
     public static class Builder {
         private Integer id;
         private String firstName;

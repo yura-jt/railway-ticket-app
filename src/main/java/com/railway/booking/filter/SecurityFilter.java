@@ -17,13 +17,13 @@ public class SecurityFilter implements Filter {
             throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-//        final String path = request.getRequestURI();
-//        final User user = (User) request.getSession().getAttribute("User.Role");
-//        final RoleType roleType = user.getRoleType();
-//
-//        if (path.contains("manage") && roleType != RoleType.ADMIN) {
-//            request.getRequestDispatcher("view/access_denied.jps").forward(request, servletResponse);
-//        }
+        final String path = request.getRequestURI();
+        final User user = (User) request.getSession().getAttribute("user");
+
+        if (user != null && path.contains("manage") && user.getRoleType() != RoleType.ADMIN) {
+            request.getRequestDispatcher("view/access_denied.jsp").forward(request, servletResponse);
+            return;
+        }
         filterChain.doFilter(request, servletResponse);
     }
 }
