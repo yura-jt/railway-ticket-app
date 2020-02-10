@@ -68,15 +68,18 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
         }
     }
 
-    public void save(E entity) {
+    public boolean save(E entity) {
+        boolean isSaved = false;
         try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(SAVE_QUERY)) {
             insert(preparedStatement, entity);
             preparedStatement.execute();
+            isSaved = true;
         } catch (SQLException e) {
             String message = String.format("Fail to execute next query: %s", SAVE_QUERY);
             LOGGER.warn(message, e);
             throw new DatabaseSqlRuntimeException(message, e);
         }
+        return isSaved;
     }
 
     public void update(E entity) {

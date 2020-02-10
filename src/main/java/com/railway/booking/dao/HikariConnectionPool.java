@@ -40,6 +40,7 @@ public class HikariConnectionPool implements DatabaseConnector {
         hikariDataSource.setJdbcUrl(hikariProfile.getJdbcUrl());
         hikariDataSource.setUsername(hikariProfile.getUsername());
         hikariDataSource.setPassword(hikariProfile.getPassword());
+        hikariDataSource.setDriverClassName(hikariProfile.getDriverClassName());
 
         hikariDataSource.addDataSourceProperty("cachePrepStmts", hikariProfile.getCachePrepStmts());
         hikariDataSource.addDataSourceProperty("prepStmtCacheSize", hikariProfile.getPrepStmtCacheSize());
@@ -52,6 +53,7 @@ public class HikariConnectionPool implements DatabaseConnector {
         private final String jdbcUrl;
         private final String username;
         private final String password;
+        private final String driverClassName;
         private final String cachePrepStmts;
         private final String prepStmtCacheSize;
         private final String prepStmtCacheSqlLimit;
@@ -65,6 +67,7 @@ public class HikariConnectionPool implements DatabaseConnector {
             jdbcUrl = resource.getString("db.url");
             username = resource.getString("db.user");
             password = resource.getString("db.password");
+            driverClassName = resource.getString("db.driver");
 
             ResourceBundle hikariConfig = ResourceBundle.getBundle(HIKARI_CONFIG_PROPERTY);
             cachePrepStmts = hikariConfig.getString("cache_prep_stmts");
@@ -84,6 +87,10 @@ public class HikariConnectionPool implements DatabaseConnector {
 
         public String getPassword() {
             return password;
+        }
+
+        public String getDriverClassName() {
+            return driverClassName;
         }
 
         public String getCachePrepStmts() {

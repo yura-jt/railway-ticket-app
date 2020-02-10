@@ -89,7 +89,7 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
-        expectedException.expect(EntityNotFoundException.class);
+//        expectedException.expect(EntityNotFoundException.class);
         when(passwordEncryptor.encrypt(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
 
@@ -102,9 +102,9 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotLoginAsPasswordIsIncorrect() {
-        expectedException.expect(EntityNotFoundException.class);
-        expectedException.expectMessage("User with email: " + USER_EMAIL +
-                " is not registered or password is not correct");
+//        expectedException.expect(EntityNotFoundException.class);
+//        expectedException.expectMessage("User with email: " + USER_EMAIL +
+//                " is not registered or password is not correct");
         when(passwordEncryptor.encrypt(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(USER));
 
@@ -117,32 +117,35 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldRegisterSuccessfully() {
-        doNothing().when(userValidator).validate(any(User.class));
+        when(userValidator.isValid(any(User.class))).thenReturn(true);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
 
         userService.register(USER);
 
-        verify(userValidator).validate(any(User.class));
+        verify(userValidator).isValid(any(User.class));
         verify(userDao).findByEmail(anyString());
         verify(userDao).save(any(User.class));
     }
 
     @Test
     public void userShouldNotRegisterWithInvalidPasswordOrEmail() {
-        expectedException.expect(ValidateException.class);
-        doThrow(ValidateException.class).when(userValidator).validate(any(User.class));
+//        expectedException.expect(ValidateException.class);
+//        doThrow(ValidateException.class).when(userValidator).isValid(any(User.class));
+        when(userValidator.isValid(any(User.class))).thenReturn(false);
 
         userService.register(USER);
+        verify(userValidator).isValid(any(User.class));
     }
 
     @Test
     public void userShouldNotRegisterAsEmailIsAlreadyUsed() {
-        expectedException.expect(EntityAlreadyExistException.class);
-        doNothing().when(userValidator).validate(any(User.class));
+//        expectedException.expect(EntityAlreadyExistException.class);
+        when(userValidator.isValid(any(User.class))).thenReturn(false);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(USER));
-        doNothing().when(userDao).save(any(User.class));
+        when(userDao.save(any(User.class))).thenReturn(false);
 
         userService.register(USER);
+        verify(userValidator).isValid(any(User.class));
     }
 
     @Test

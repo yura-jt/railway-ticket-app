@@ -9,22 +9,24 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 
 public class PasswordEncryptor {
     private static final Logger LOGGER = LogManager.getLogger(PasswordEncryptor.class);
+
+    private static final byte[] SALT = new byte[]{-28, 92, -41, -15, 75, -12, 49, -82, -46, -84, 92, -27, 45, -23, -16, 53};
 
     private static final int ITERATION_COUNT = 1000;
     private static final int KEY_LENGTH = 64 * 8;
     private static final int HASH_SIZE = 16;
 
-    private byte[] salt = getSalt();
 
     public String encrypt(String password) {
         char[] passwordChars = password.toCharArray();
         byte[] hash = new byte[0];
         try {
 
-            PBEKeySpec spec = new PBEKeySpec(passwordChars, salt, ITERATION_COUNT, KEY_LENGTH);
+            PBEKeySpec spec = new PBEKeySpec(passwordChars, SALT, ITERATION_COUNT, KEY_LENGTH);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             hash = skf.generateSecret(spec).getEncoded();
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

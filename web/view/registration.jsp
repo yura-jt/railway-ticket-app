@@ -22,9 +22,9 @@
 <div class="container">
     <h5>
         <ul>
-            <li><a href="?lang=en"><fmt:message key="switch.en" /></a></li>
-            <li><a href="?lang=ua"><fmt:message key="switch.ua" /></a></li>
-            <li><a href="?lang=ru"><fmt:message key="switch.ru" /></a></li>
+            <li><a href="registrationForm?lang=en"><fmt:message key="switch.en" /></a></li>
+            <li><a href="registrationForm?lang=ua"><fmt:message key="switch.ua" /></a></li>
+            <li><a href="registrationForm?lang=ru"><fmt:message key="switch.ru" /></a></li>
         </ul>
     </h5>
     <div class="row justify-content-center">
@@ -33,14 +33,14 @@
                 <div class="card-header"><fmt:message key="register.title" /></div>
                 <div class="card-body">
 
-                    <form class="form-horizontal" method="post" action="#">
+                    <form class="form-horizontal" method="post" action="registration">
 
                         <div class="form-group">
-                            <label for="firstname" class="cols-sm-2 control-label"><fmt:message key="first.name.field" /></label>
+                            <label for="first_name" class="cols-sm-2 control-label"><fmt:message key="first.name.field" /></label>
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="firstname" id="firstname" placeholder="<fmt:message key="enter.first.name" />" />
+                                    <input type="text" class="form-control" name="first_name" id="first_name" placeholder="<fmt:message key="enter.first.name" />" />
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-user fa" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="lastname" id="lastname" placeholder="<fmt:message key="enter.last.name" />" />
+                                    <input type="text" class="form-control" name="last_name" id="lastname" placeholder="<fmt:message key="enter.last.name" />" />
                                 </div>
                             </div>
                         </div>
@@ -63,11 +63,11 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="username" class="cols-sm-2 control-label"><fmt:message key="phone.number.field" /></label>
+                            <label for="phonenumber" class="cols-sm-2 control-label"><fmt:message key="phone.number.field" /></label>
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-users fa" aria-hidden="true"></i></span>
-                                    <input type="text" class="form-control" name="username" id="username" placeholder="<fmt:message key="enter.phone.number" />" />
+                                    <input type="text" class="form-control" name="phone_number" id="phonenumber" placeholder="<fmt:message key="enter.phone.number" />" />
                                 </div>
                             </div>
                         </div>
@@ -81,17 +81,19 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="confirm" class="cols-sm-2 control-label"><fmt:message key="confirm.password.field" /></label>
+                            <label for="password_repeated" class="cols-sm-2 control-label"><fmt:message key="confirm.password.field" /></label>
                             <div class="cols-sm-10">
                                 <div class="input-group">
                                     <span class="input-group-addon"><i class="fa fa-lock fa-lg" aria-hidden="true"></i></span>
-                                    <input type="password" class="form-control" name="confirm" id="confirm" placeholder="<fmt:message key="enter.confirm.password" />" />
+                                    <input type="password" class="form-control" name="password_repeated" id="password_repeated" placeholder="<fmt:message key="enter.confirm.password" />" />
                                 </div>
                             </div>
                         </div>
                         <label class="cols-sm-2 control-label"><fmt:message key="mandatory.field" /> </label>
                         <div class="form-group ">
-                            <button type="button" name="registrationButton" class="btn btn-primary btn-lg btn-block login-button"><fmt:message key="register.button" /></button>
+                            <button type="submit" name="registrationButton" class="btn btn-primary btn-lg btn-block login-button"><fmt:message key="register.button" /></button>
+<%--                            <input type="submit" value="Submit" />--%>
+<%--                            <div align="center"><a href="registration"><fmt:message key="register.button"/></a></div>--%>
                         </div>
                     </form>
                     <script type="text/javascript">

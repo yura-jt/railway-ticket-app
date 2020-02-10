@@ -4,7 +4,6 @@ import com.railway.booking.command.Command;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
 import com.railway.booking.service.UserService;
-import com.railway.booking.service.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,8 +21,6 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("entering to registration command");
-
         String firstName = request.getParameter("first_name");
         String lastName = request.getParameter("last_name");
         String email = request.getParameter("email");
@@ -31,17 +28,22 @@ public class RegistrationCommand implements Command {
         String password = request.getParameter("password");
         String passwordRepeat = request.getParameter("password_repeated");
 
-//        User user = User.builder()
-//                .withFirstName(firstName)
-//                .withLastName(lastName)
-//                .withEmail(email)
-//                .withPhoneNumber(phoneNumber)
-//                .withPassword(password)
-//                .withRoleType(RoleType.PASSENGER)
-//                .build();
-//
-//        userService.register(user);
+        if (!password.equals(passwordRepeat)) {
+            return "registrationForm";
+        }
 
-        return "/view/user.jsp";
+        User user = User.builder()
+                .withFirstName(firstName)
+                .withLastName(lastName)
+                .withEmail(email)
+                .withPhoneNumber(phoneNumber)
+                .withPassword(password)
+                .withRoleType(RoleType.PASSENGER)
+                .build();
+
+        if (userService.register(user)) {
+            return "/view/profile.jsp";
+        }
+        return "/view/registration.jsp";
     }
 }

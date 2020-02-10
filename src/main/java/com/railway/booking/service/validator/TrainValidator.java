@@ -13,9 +13,16 @@ public class TrainValidator implements Validator<Train> {
     private static final Integer MAX_NAME_LENGTH = 100;
 
     @Override
-    public void validate(Train entity) {
-        validateStringLength(entity.getCode(), MAX_CODE_LENGTH);
-        validateStringLength(entity.getName(), MAX_NAME_LENGTH);
+    public boolean isValid(Train entity) {
+        boolean isValid = false;
+        try {
+            validateStringLength(entity.getCode(), MAX_CODE_LENGTH);
+            validateStringLength(entity.getName(), MAX_NAME_LENGTH);
+            isValid = true;
+        } catch (ValidateException e) {
+            LOGGER.warn("Train entity validation exception occurred");
+        }
+        return isValid;
     }
 
     @Override

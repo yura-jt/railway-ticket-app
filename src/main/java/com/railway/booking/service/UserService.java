@@ -9,7 +9,7 @@ public interface UserService {
 
     User login(String email, String password);
 
-    void register(User user);
+    boolean register(User user);
 
     List<User> findAll(int pageNumber);
 

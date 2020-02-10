@@ -25,9 +25,9 @@
       <h3> <fmt:message key="app.title" /> </h3>
       <h5>
       <ul>
-        <li><a href="?lang=en"><fmt:message key="switch.en" /></a></li>
-        <li><a href="?lang=ua"><fmt:message key="switch.ua" /></a></li>
-        <li><a href="?lang=ru"><fmt:message key="switch.ru" /></a></li>
+        <li><a href="loginForm?lang=en"><fmt:message key="switch.en" /></a></li>
+        <li><a href="loginForm?lang=ua"><fmt:message key="switch.ua" /></a></li>
+        <li><a href="loginForm?lang=ru"><fmt:message key="switch.ru" /></a></li>
       </ul>
         </h5>
     </div>
@@ -40,24 +40,24 @@
         </div>
       </div>
       <div class="d-flex justify-content-center form_container">
-        <form>
+        <form method="post" action="login">
           <div class="input-group mb-3">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-user"></i></span>
             </div>
-            <input type="text" name="" class="form-control input_user" value="" placeholder="e-mail">
+            <input type="text" name="email" class="form-control input_user" value="" placeholder="e-mail">
           </div>
           <div class="input-group mb-2">
             <div class="input-group-append">
               <span class="input-group-text"><i class="fas fa-key"></i></span>
             </div>
-            <input type="password" name="" class="form-control input_pass" value="" placeholder="<fmt:message key="password" />">
+            <input type="password" name="password" class="form-control input_pass" value="" placeholder="<fmt:message key="password" />">
           </div>
           <div class="form-group">
 
           </div>
           <div class="d-flex justify-content-center mt-3 login_container">
-            <button type="button" href="login" name="loginButton" class="btn login_btn"><fmt:message key="login.button" /></button>
+            <button type="submit" href="login" name="loginButton" class="btn login_btn"><fmt:message key="login.button" /></button>
 <%--                  <td><input type="submit" class="button" name="btnLogin" value=<fmt:message key="login.button"/> /></td>--%>
           </div>
         </form>
@@ -66,8 +66,7 @@
       <div class="mt-4">
         <div class="d-flex justify-content-center links">
           <fmt:message key="dont.have.account" /> <a href="#" class="ml-2">
-            <div align="center"><a href="registration"><fmt:message key="register"/></a></div>
-<%--          <fmt:message key="register" />--%>
+            <div align="center"><a href="registrationForm"><fmt:message key="register"/></a></div>
         </a>
         </div>
       </div>

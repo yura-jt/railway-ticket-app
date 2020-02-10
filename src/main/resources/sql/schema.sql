@@ -34,7 +34,7 @@ CREATE TABLE users
     last_name    VARCHAR(50)  NOT NULL,
     email        VARCHAR(254) NOT NULL,
     phone_number VARCHAR(20)  NOT NULL,
-    password     VARCHAR(20)  NOT NULL,
+    password     VARCHAR(130)  NOT NULL,
     role_type    VARCHAR(20)  NOT NULL,
     CONSTRAINT users_PK PRIMARY KEY (id),
     CONSTRAINT users_email_AK UNIQUE (email)
