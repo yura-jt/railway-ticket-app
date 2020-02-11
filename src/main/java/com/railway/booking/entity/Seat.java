@@ -3,14 +3,12 @@ package com.railway.booking.entity;
 public class Seat {
     private final Integer billId;
     private final Integer number;
-    private final Integer ticketId;
     private final Integer carriageId;
     private final SeatStatus status;
 
     private Seat(Builder builder) {
         this.billId = builder.billId;
         this.number = builder.number;
-        this.ticketId = builder.ticketId;
         this.carriageId = builder.carriageId;
         this.status = builder.status;
     }
@@ -21,10 +19,6 @@ public class Seat {
 
     public Integer getNumber() {
         return number;
-    }
-
-    public Integer getTicketId() {
-        return ticketId;
     }
 
     public SeatStatus getStatus() {
@@ -42,7 +36,6 @@ public class Seat {
     public static class Builder {
         private Integer billId;
         private Integer number;
-        private Integer ticketId;
         private Integer carriageId;
         private SeatStatus status;
 
@@ -56,11 +49,6 @@ public class Seat {
 
         public Builder withNumber(Integer number) {
             this.number = number;
-            return this;
-        }
-
-        public Builder withTicketId(Integer ticketId) {
-            this.ticketId = ticketId;
             return this;
         }
 

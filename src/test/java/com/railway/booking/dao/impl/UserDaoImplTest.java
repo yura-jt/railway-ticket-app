@@ -5,8 +5,8 @@ import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.dao.impl.Util.JdbcUtil;
 import com.railway.booking.dao.impl.Util.TestDatabaseConnector;
-import com.railway.booking.entity.User;
 import com.railway.booking.entity.RoleType;
+import com.railway.booking.entity.User;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,49 +42,6 @@ public class UserDaoImplTest {
     public void dataBaseInit() throws SQLException {
         createTables(dataSource);
         fillTestData(dataSource);
-    }
-
-    private static void createTables(DatabaseConnector dataSource) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement createTableStatement = connection.createStatement();
-            createTableStatement.execute(CREATE_TABLES_QUERY);
-        }
-    }
-
-    private static void fillTestData(DatabaseConnector dataSource) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement createTableStatement = connection.createStatement();
-            createTableStatement.execute(GENERATE_DATA_QUERY);
-        }
-    }
-
-    private User generateTestUser(Integer id) {
-        return User.builder()
-                .withId(id)
-                .withFirstName("Canute")
-                .withLastName("Ithidriel")
-                .withEmail("canute@gmail.com")
-                .withPhoneNumber("+3804565478754")
-                .withPassword("password")
-                .withRoleType(RoleType.PASSENGER)
-                .build();
-    }
-
-    private List<User> generateListUser(int quantity) {
-        List<User> list = new ArrayList<>();
-        for (int i = 0; i < quantity; i++) {
-            User user = User.builder()
-                    .withId(i + 1)
-                    .withFirstName("Canute" + i)
-                    .withLastName("Ithidriel" + i)
-                    .withEmail("canute@gmail.com" + i)
-                    .withPhoneNumber("+3804565478754" + i)
-                    .withPassword("password" + i)
-                    .withRoleType(RoleType.PASSENGER)
-                    .build();
-            list.add(user);
-        }
-        return list;
     }
 
 
@@ -298,5 +255,48 @@ public class UserDaoImplTest {
             return itemPerPage;
         }
         return quantity - ((pageNumber - 1) * itemPerPage);
+    }
+
+    private User generateTestUser(Integer id) {
+        return User.builder()
+                .withId(id)
+                .withFirstName("Canute")
+                .withLastName("Ithidriel")
+                .withEmail("canute@gmail.com")
+                .withPhoneNumber("+3804565478754")
+                .withPassword("password")
+                .withRoleType(RoleType.PASSENGER)
+                .build();
+    }
+
+    private static void createTables(DatabaseConnector dataSource) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            Statement createTableStatement = connection.createStatement();
+            createTableStatement.execute(CREATE_TABLES_QUERY);
+        }
+    }
+
+    private static void fillTestData(DatabaseConnector dataSource) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            Statement createTableStatement = connection.createStatement();
+            createTableStatement.execute(GENERATE_DATA_QUERY);
+        }
+    }
+
+    private List<User> generateListUser(int quantity) {
+        List<User> list = new ArrayList<>();
+        for (int i = 0; i < quantity; i++) {
+            User user = User.builder()
+                    .withId(i + 1)
+                    .withFirstName("Canute" + i)
+                    .withLastName("Ithidriel" + i)
+                    .withEmail("canute@gmail.com" + i)
+                    .withPhoneNumber("+3804565478754" + i)
+                    .withPassword("password" + i)
+                    .withRoleType(RoleType.PASSENGER)
+                    .build();
+            list.add(user);
+        }
+        return list;
     }
 }

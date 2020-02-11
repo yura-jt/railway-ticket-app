@@ -11,10 +11,10 @@ import java.sql.SQLException;
 public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM seats WHERE bill_id = ?";
     private static final String SAVE_QUERY = "INSERT INTO seats (bill_id, number, carriage_id, " +
-            "ticket_id, status) VALUES (?, ?, ?, ?, ?)";
+            "status) VALUES (?, ?, ?, ?)";
     private static final String FIND_ALL_QUERY = "SELECT * FROM seats LIMIT ? OFFSET ?";
     private static final String UPDATE_QUERY = "UPDATE seats SET bill_id = ?, number = ?, carriage_id = ?," +
-            "ticket_id = ?, status = ? where bill_id = ?";
+            "status = ? where bill_id = ?";
     private static final String DELETE_BY_ID_QUERY = "DELETE FROM seats WHERE bill_id = ?";
     private static final String COUNT_QUERY = "SELECT COUNT(*) FROM seats";
 
@@ -27,7 +27,6 @@ public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
         return Seat.builder()
                 .withBillId(resultSet.getInt("bill_id"))
                 .withNumber(resultSet.getInt("number"))
-                .withTicketId(resultSet.getInt("ticket_id"))
                 .withCarriageId(resultSet.getInt("ticket_id"))
                 .withSeatStatus(SeatStatus.valueOf(resultSet.getString("status").toUpperCase()))
                 .build();
@@ -37,14 +36,13 @@ public class SeatDaoImpl extends AbstractCrudDaoImpl<Seat> {
     protected void insert(PreparedStatement preparedStatement, Seat entity) throws SQLException {
         preparedStatement.setInt(1, entity.getBillId());
         preparedStatement.setInt(2, entity.getNumber());
-        preparedStatement.setInt(3, entity.getTicketId());
-        preparedStatement.setInt(4, entity.getCarriageId());
-        preparedStatement.setString(5, entity.getStatus().toString());
+        preparedStatement.setInt(3, entity.getCarriageId());
+        preparedStatement.setString(4, entity.getStatus().toString());
     }
 
     @Override
     protected void update(PreparedStatement preparedStatement, Seat entity) throws SQLException {
         insert(preparedStatement, entity);
-        preparedStatement.setInt(6, entity.getBillId());
+        preparedStatement.setInt(5, entity.getBillId());
     }
 }

@@ -3,11 +3,6 @@ VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'PA
        ('Jobe', 'Smith', 'lawnmower@gmail.com', '+380509998877', 'passwordT2', 'ADMIN'),
        ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'admin', 'ADMIN');
 
-INSERT INTO tickets (departure_station, destination_station, passenger_name, price, flight_id,
-                     seat_id, user_id, bill_id, created_on)
-VALUES ('Кривий Ріг', 'Одеса', 'Бундуцький Олексій', 599.60, 2, 1, 1, 1, default),
-       ('Кривий Ріг', 'Одеса', 'Бундуцька Марія', 599.60, 2, 2, 1, 2, default);
-
 INSERT INTO trains (code, name)
 VALUES ('43K', 'Подільський експрес'),
        ('122', 'Срібна стріла');
@@ -49,10 +44,16 @@ VALUES (1, 'INVOICED', 860),
        (2, 'PAID', 700),
        (3, 'PAID', 700);
 
-INSERT INTO seats (bill_id, number, carriage_id, ticket_id, status)
-VALUES (1, 1, 1, NULL, 'RESERVED'),
-       (2, 1, 6, 1, 'SOLD'),
-       (3, 2, 6, 2, 'SOLD');
+INSERT INTO seats (bill_id, number, carriage_id, status)
+VALUES (1, 1, 1, 'RESERVED'),
+       (2, 1, 6, 'SOLD'),
+       (3, 2, 6, 'SOLD');
+
+INSERT INTO tickets (departure_station, destination_station, passenger_name, price, flight_id,
+                     seat_id, user_id, bill_id, created_on)
+VALUES ('Кривий Ріг', 'Одеса', 'Бундуцький Олексій', 599.60, 2, 1, 1, 1, default),
+       ('Кривий Ріг', 'Одеса', 'Бундуцька Марія', 599.60, 2, 2, 1, 2, default);
+
 INSERT INTO tariffs (carriage_type, rate)
 VALUES ('OPEN_SLEEPING', 10),
        ('COUPE', 24),

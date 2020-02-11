@@ -40,22 +40,6 @@ CREATE TABLE users
     CONSTRAINT users_email_AK UNIQUE (email)
 );
 
-CREATE TABLE tickets
-(
-    id                  INT(10)                 NOT NULL AUTO_INCREMENT,
-    departure_station   VARCHAR(100)            NOT NULL,
-    destination_station VARCHAR(100)            NOT NULL,
-    passenger_name      VARCHAR(100)            NOT NULL,
-    price               DECIMAL                 NOT NULL,
-    flight_id           INT(10)                 NOT NULL,
-    seat_id             INT(10)                 NOT NULL,
-    user_id             INT(10)                 NOT NULL,
-    bill_id             INT(10)                 NOT NULL,
-    created_on          TIMESTAMP DEFAULT now() NOT NULL,
-    CONSTRAINT tickets_PK PRIMARY KEY (id),
-    CONSTRAINT tickets_seat_id_AK UNIQUE (seat_id)
-);
-
 CREATE TABLE trains
 (
     id   INT(10)      NOT NULL AUTO_INCREMENT,
@@ -124,13 +108,31 @@ CREATE TABLE seats
 (
     bill_id     INT(10)     NOT NULL,
     number      INT(2)      NOT NULL,
-    ticket_id   INT(10)     NULL,
     carriage_id INT(10)     NOT NULL,
     status      VARCHAR(20) NOT NULL,
     CONSTRAINT seats_PK PRIMARY KEY (bill_id),
     CONSTRAINT seats_bills_FK FOREIGN KEY (bill_id) REFERENCES bills (order_id),
-    CONSTRAINT seats_tickets_FK FOREIGN KEY (ticket_id) REFERENCES tickets (id),
     CONSTRAINT seats_carriages_FK FOREIGN KEY (carriage_id) REFERENCES carriages (id)
+);
+
+CREATE TABLE tickets
+(
+    id                  INT(10)                 NOT NULL AUTO_INCREMENT,
+    departure_station   VARCHAR(100)            NOT NULL,
+    destination_station VARCHAR(100)            NOT NULL,
+    passenger_name      VARCHAR(100)            NOT NULL,
+    price               DECIMAL                 NOT NULL,
+    flight_id           INT(10)                 NOT NULL,
+    seat_id             INT(10)                 NOT NULL,
+    user_id             INT(10)                 NOT NULL,
+    bill_id             INT(10)                 NOT NULL,
+    created_on          TIMESTAMP DEFAULT now() NOT NULL,
+    CONSTRAINT tickets_PK PRIMARY KEY (id),
+    CONSTRAINT tickets_seat_id_AK UNIQUE (seat_id),
+    CONSTRAINT tickets_flight_id_FK FOREIGN KEY (flight_id) REFERENCES flights (id),
+    CONSTRAINT tickets_seat_id_FK FOREIGN KEY (seat_id) REFERENCES seats (bill_id),
+    CONSTRAINT tickets_user_id_FK FOREIGN KEY (user_id) REFERENCES users (id),
+    CONSTRAINT tickets_bill_id_FK FOREIGN KEY (bill_id) REFERENCES bills (order_id)
 );
 
 CREATE TABLE tariffs
