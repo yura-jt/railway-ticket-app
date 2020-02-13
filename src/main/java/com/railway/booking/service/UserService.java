@@ -11,7 +11,7 @@ public interface UserService {
 
     boolean register(User user);
 
-    List<User> findAll(String pageNumber);
+    List<User> findAll(int pageNumber);
 
     User findById(Integer id);
 

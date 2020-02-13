@@ -23,9 +23,10 @@
         <div id="admin-sidebar" class="col-md-2 p-x-0 p-y-3">
             <ul class="sidenav admin-sidenav list-unstyled">
                 <li><a href="#"><fmt:message key="profile.make.order" /></a></li>
-                <li><a href="#"><fmt:message key="profile.tran.schedule" /></a></li>
-                <li><a href="#"><fmt:message key="profile.my.tickets" /></a></li>
-                <li><a href="#"><fmt:message key="profile.my.bills" /></a></li>
+                <li><a href="trains"><fmt:message key="profile.tran.schedule" /></a></li>
+                <li><a href="tickets"><fmt:message key="profile.my.tickets" /></a></li>
+                <li><a href="orders"><fmt:message key="profile.my.orders" /></a></li>
+                <li><a href="bills"><fmt:message key="profile.my.bills" /></a></li>
                 <li><a href="logout"><fmt:message key="profile.log.out" /></a></li>
             </ul>
         </div> <!-- /#admin-sidebar -->

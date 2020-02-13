@@ -12,4 +12,6 @@ public interface OrderService {
     void update(Order order);
 
     List<Order> findAll(int pageNumber);
+
+    Integer count();
 }

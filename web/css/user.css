@@ -3,17 +3,17 @@
 
 body {
     font-family: 'Raleway:300', sans-serif;
-    background: #60a3bc !important;
+    background: #fff3e5 !important;
 }
 html {
-    background: #60a3bc !important;
+    background: #fcfef9 !important;
 }
 
 .admin-sidenav {
     width: auto;
     height: auto;
-    margin-left: 0px;
-    background: #60a3bc !important;
+    margin-left: 40px;
+    background: #fcfef9!important;
 }
 .admin-sidenav a {
     text-decoration: none;
@@ -24,11 +24,11 @@ html {
     padding-left: 1rem;
     -webkit-transition: all .2s linear;
     transition: all .2s linear;
-    background-color: #000;
+    background-color: #f0ad4e;
     border: 1px solid #333;
 }
 .admin-sidenav li a {
-    color: #fff;
+    color: #333333;
 }
 
 .admin-sidenav li a:active {
@@ -40,8 +40,8 @@ html {
     border-color: #02d3f5;
     -webkit-transform: translate(30px, 0px);
     transform: translate(30px, 0px);
-    background: -webkit-linear-gradient(left, #006a7b, #002340);
-    background: linear-gradient(to right, #006a7b, #002340);
+    background: -webkit-linear-gradient(left, #bca68d, #f0ad4e);
+    background: linear-gradient(to right, #bca68d, #f0ad4e);
 }
 
 .admin-sidenav li:active {

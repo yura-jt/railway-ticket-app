@@ -3,6 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.User;
+import com.railway.booking.service.PaginationUtil;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
@@ -10,6 +11,7 @@ import com.railway.booking.service.validator.ValidateException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.Collections;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
@@ -20,12 +22,15 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncryptor passwordEncryptor;
     private final UserDao userDao;
     private final UserValidator userValidator;
+    private final PaginationUtil paginationUtil;
 
 
-    public UserServiceImpl(UserDao userDao, UserValidator userValidator, PasswordEncryptor passwordEncryptor) {
+    public UserServiceImpl(UserDao userDao, UserValidator userValidator, PasswordEncryptor passwordEncryptor,
+                           PaginationUtil paginationUtil) {
         this.userDao = userDao;
         this.userValidator = userValidator;
         this.passwordEncryptor = passwordEncryptor;
+        this.paginationUtil = paginationUtil;
     }
 
     @Override
@@ -62,31 +67,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll(String page) {
-        int pageNumber = parsePage(page);
-        int maxPage = getMaxPage();
+    public List<User> findAll(int pageNumber) {
+        int maxPage = paginationUtil.getMaxPage((int) userDao.count(), USER_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
             pageNumber = maxPage;
         }
+        List<User> users = userDao.findAll(new Page(pageNumber, USER_PER_PAGE));
 
-        return userDao.findAll(new Page(pageNumber, USER_PER_PAGE));
+        return users != null ? users : Collections.emptyList();
     }
 
     @Override
     public User findById(Integer id) {
         userValidator.validateId(id);
         return userDao.findById(id).orElse(null);
-    }
-
-    private int getMaxPage() {
-        int totalUsers = (int) userDao.count();
-        int page = totalUsers / USER_PER_PAGE;
-        if (totalUsers % USER_PER_PAGE != 0) {
-            page++;
-        }
-        return page == 0 ? 1 : page;
     }
 
     private boolean isValidCredentials(String email, String password) {
@@ -101,15 +97,5 @@ public class UserServiceImpl implements UserService {
             LOGGER.warn(String.format("Credentials, provided for email: %s are not valid ", email));
         }
         return isValid;
-    }
-
-    private int parsePage(String pageNumber) {
-        int page = 1;
-        try {
-            page = Integer.parseInt(pageNumber);
-        } catch (NumberFormatException e) {
-            LOGGER.warn(String.format("Can not parse page number from string: %s", pageNumber));
-        }
-        return page;
     }
 }

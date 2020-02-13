@@ -1,24 +1,27 @@
 package com.railway.booking.service.impl;
 
 import com.railway.booking.dao.CrudDao;
+import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Bill;
 import com.railway.booking.entity.BillStatus;
 import com.railway.booking.service.BillService;
+import com.railway.booking.service.PaginationUtil;
 import com.railway.booking.service.validator.BillValidator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
 public class BillServiceImpl implements BillService {
-    private static final Logger LOGGER = LogManager.getLogger(BillServiceImpl.class);
+    private static final Integer MAX_BILL_PER_PAGE = 5;
 
     private final CrudDao<Bill> billDao;
     private final BillValidator billValidator;
+    private final PaginationUtil paginationUtil;
 
-    public BillServiceImpl(CrudDao<Bill> billDao, BillValidator billValidator) {
+    public BillServiceImpl(CrudDao<Bill> billDao, BillValidator billValidator,
+                           PaginationUtil paginationUtil) {
         this.billDao = billDao;
         this.billValidator = billValidator;
+        this.paginationUtil = paginationUtil;
     }
 
     @Override
@@ -39,6 +42,11 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
+    public Integer count() {
+        return (int) billDao.count();
+    }
+
+    @Override
     public Bill getById(Integer id) {
         billValidator.validateId(id);
         return billDao.findById(id).orElse(null);
@@ -46,6 +54,12 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<Bill> findAll(int pageNumber) {
-        return null;
+        int maxPage = paginationUtil.getMaxPage(count(), MAX_BILL_PER_PAGE);
+        if (pageNumber <= 0) {
+            pageNumber = 1;
+        } else if (pageNumber >= maxPage) {
+            pageNumber = maxPage;
+        }
+        return billDao.findAll(new Page(pageNumber, MAX_BILL_PER_PAGE));
     }
 }

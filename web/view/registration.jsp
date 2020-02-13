@@ -6,6 +6,8 @@
 <fmt:setLocale value="${param.lang}" />
 <fmt:setBundle basename="messages" />
 
+
+
 <html lang="${param.lang}">
 <!DOCTYPE html>
 <html>
@@ -21,12 +23,16 @@
 <body>
 <div class="container">
     <h5>
+        <a href="loginForm" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;"> &larr; <fmt:message key="proceed.login" /></a>
+    </h5>
+
         <ul>
             <li><a href="registrationForm?lang=en"><fmt:message key="switch.en" /></a></li>
             <li><a href="registrationForm?lang=ua"><fmt:message key="switch.ua" /></a></li>
             <li><a href="registrationForm?lang=ru"><fmt:message key="switch.ru" /></a></li>
         </ul>
-    </h5>
+
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
