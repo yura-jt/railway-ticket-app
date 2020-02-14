@@ -4,7 +4,7 @@ import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Order;
 import com.railway.booking.service.OrderService;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.validator.OrderValidator;
 
 import java.util.List;
@@ -14,13 +14,13 @@ public class OrderServiceImpl implements OrderService {
     private static final Integer MAX_ORDER_PER_PAGE = 5;
     private final CrudDao<Order> orderDao;
     private final OrderValidator orderValidator;
-    private final PaginationUtil paginationUtil;
+    private final Paginator paginator;
 
     public OrderServiceImpl(CrudDao<Order> orderDao, OrderValidator orderValidator,
-                            PaginationUtil paginationUtil) {
+                            Paginator paginator) {
         this.orderDao = orderDao;
         this.orderValidator = orderValidator;
-        this.paginationUtil = paginationUtil;
+        this.paginator = paginator;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findAll(int pageNumber) {
-        int maxPage = paginationUtil.getMaxPage(count(), MAX_ORDER_PER_PAGE);
+        int maxPage = paginator.getMaxPage(count(), MAX_ORDER_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {

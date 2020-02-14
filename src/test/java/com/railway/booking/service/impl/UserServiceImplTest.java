@@ -4,7 +4,7 @@ import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.RoleType;
 import com.railway.booking.entity.User;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.validator.UserValidator;
 import org.junit.After;
@@ -59,7 +59,7 @@ public class UserServiceImplTest {
     private UserValidator userValidator;
 
     @Mock
-    private PaginationUtil paginationUtil;
+    private Paginator paginator;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -176,7 +176,7 @@ public class UserServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
-        when(paginationUtil.getMaxPage(anyInt(), anyInt())).thenReturn(1);
+        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(userDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
         final List<User> actual = userService.findAll(1);

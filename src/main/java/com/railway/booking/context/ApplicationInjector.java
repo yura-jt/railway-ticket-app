@@ -8,13 +8,13 @@ import com.railway.booking.command.user.LogoutCommand;
 import com.railway.booking.command.user.OrderCommand;
 import com.railway.booking.command.user.ProfileCommand;
 import com.railway.booking.command.user.RegistrationCommand;
-import com.railway.booking.command.user.RegistrationForm;
+import com.railway.booking.command.user.RegistrationFormCommand;
 import com.railway.booking.command.user.TicketCommand;
 import com.railway.booking.command.user.TrainCommand;
 import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.HikariConnectionPool;
-import com.railway.booking.dao.PageUtil;
+import com.railway.booking.dao.PageProvider;
 import com.railway.booking.dao.TariffDao;
 import com.railway.booking.dao.TrainDao;
 import com.railway.booking.dao.UserDao;
@@ -29,7 +29,7 @@ import com.railway.booking.entity.Order;
 import com.railway.booking.entity.Ticket;
 import com.railway.booking.service.BillService;
 import com.railway.booking.service.OrderService;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.TariffService;
 import com.railway.booking.service.TicketService;
@@ -63,8 +63,8 @@ public class ApplicationInjector {
 
     private static final DatabaseConnector DATABASE_CONNECTOR = new HikariConnectionPool();
 
-    private static final PageUtil PAGE_UTIL = new PageUtil();
-    private static final PaginationUtil PAGINATION_UTIL = new PaginationUtil();
+    private static final PageProvider PAGE_UTIL = new PageProvider();
+    private static final Paginator PAGINATION_UTIL = new Paginator();
 
 
     private static final UserDao USER_DAO = new UserDaoImpl(DATABASE_CONNECTOR);
@@ -90,7 +90,7 @@ public class ApplicationInjector {
         COMMANDS.put("login", new LoginCommand(USER_SERVICE));
         COMMANDS.put("logout", new LogoutCommand(USER_SERVICE));
         COMMANDS.put("registration", new RegistrationCommand(USER_SERVICE));
-        COMMANDS.put("registrationForm", new RegistrationForm());
+        COMMANDS.put("registrationForm", new RegistrationFormCommand());
         COMMANDS.put("loginForm", new LoginFormCommand());
         COMMANDS.put("profile", new ProfileCommand());
         COMMANDS.put("trains", new TrainCommand(TRAIN_SERVICE, PAGE_UTIL));

@@ -3,7 +3,7 @@ package com.railway.booking.filter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-public final class RequestWrapper extends HttpServletRequestWrapper {
+public class RequestWrapper extends HttpServletRequestWrapper {
 
     public RequestWrapper(HttpServletRequest servletRequest) {
         super(servletRequest);

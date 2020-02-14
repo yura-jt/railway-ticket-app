@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Ticket;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.TicketService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,17 +16,17 @@ public class TicketServiceImpl implements TicketService {
     private static final int TICKET_PER_PAGE = 5;
 
     private final CrudDao<Ticket> ticketDao;
-    private final PaginationUtil paginationUtil;
+    private final Paginator paginator;
 
-    public TicketServiceImpl(CrudDao<Ticket> ticketDao, PaginationUtil paginationUtil) {
+    public TicketServiceImpl(CrudDao<Ticket> ticketDao, Paginator paginator) {
         this.ticketDao = ticketDao;
-        this.paginationUtil = paginationUtil;
+        this.paginator = paginator;
     }
 
     @Override
     public List<Ticket> findAll(int pageNumber) {
         int count = count();
-        int maxPage = paginationUtil.getMaxPage(count, TICKET_PER_PAGE);
+        int maxPage = paginator.getMaxPage(count, TICKET_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {

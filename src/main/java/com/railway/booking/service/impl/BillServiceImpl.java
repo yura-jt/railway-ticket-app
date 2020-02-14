@@ -5,7 +5,7 @@ import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Bill;
 import com.railway.booking.entity.BillStatus;
 import com.railway.booking.service.BillService;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.validator.BillValidator;
 
 import java.util.List;
@@ -15,13 +15,13 @@ public class BillServiceImpl implements BillService {
 
     private final CrudDao<Bill> billDao;
     private final BillValidator billValidator;
-    private final PaginationUtil paginationUtil;
+    private final Paginator paginator;
 
     public BillServiceImpl(CrudDao<Bill> billDao, BillValidator billValidator,
-                           PaginationUtil paginationUtil) {
+                           Paginator paginator) {
         this.billDao = billDao;
         this.billValidator = billValidator;
-        this.paginationUtil = paginationUtil;
+        this.paginator = paginator;
     }
 
     @Override
@@ -54,7 +54,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<Bill> findAll(int pageNumber) {
-        int maxPage = paginationUtil.getMaxPage(count(), MAX_BILL_PER_PAGE);
+        int maxPage = paginator.getMaxPage(count(), MAX_BILL_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {

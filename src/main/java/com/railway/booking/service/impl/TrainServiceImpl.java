@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.TrainDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Train;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.TrainService;
 import com.railway.booking.service.validator.TrainValidator;
 
@@ -15,13 +15,13 @@ public class TrainServiceImpl implements TrainService {
 
     private final TrainValidator trainValidator;
     private final TrainDao trainDao;
-    private final PaginationUtil paginationUtil;
+    private final Paginator paginator;
 
 
-    public TrainServiceImpl(TrainDao trainDao, TrainValidator trainValidator, PaginationUtil paginationUtil) {
+    public TrainServiceImpl(TrainDao trainDao, TrainValidator trainValidator, Paginator paginator) {
         this.trainDao = trainDao;
         this.trainValidator = trainValidator;
-        this.paginationUtil = paginationUtil;
+        this.paginator = paginator;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     public List<Train> findAll(int pageNumber) {
-        int maxPage = paginationUtil.getMaxPage(count(), TRAIN_PER_PAGE);
+        int maxPage = paginator.getMaxPage(count(), TRAIN_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
@@ -44,7 +44,7 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public List<Train> getTrainScheduleByDate(LocalDate localDate, int pageNumber) {
         trainValidator.validateDate(localDate);
-        int maxPage = paginationUtil.getMaxPage(count(), TRAIN_PER_PAGE);
+        int maxPage = paginator.getMaxPage(count(), TRAIN_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
