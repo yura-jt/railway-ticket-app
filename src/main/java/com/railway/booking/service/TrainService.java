@@ -12,4 +12,6 @@ public interface TrainService {
     List<Train> findAll(int pageNumber);
 
     List<Train> getTrainScheduleByDate(LocalDate localDate, int pageNumber);
+
+    Integer count();
 }

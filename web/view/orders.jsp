@@ -10,12 +10,12 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>Scheduled trains</title>
+    <title>My orders</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
 </head>
 <body class="m-3">
 <div class="card-header">
-    <h3> <fmt:message key="app.title" /> </h3>
+    <h3> My Orders </h3>
     <h5>
         <ul>
             <li><a href="<my:replaceParameter name='lang' value='en' />"><fmt:message key="switch.en" /></a></li>
@@ -33,16 +33,20 @@
     </div>
     <table class="table table-striped table-bordered table-sm">
         <tr>
-            <th><fmt:message key="trains.id" /></th>
-            <th><fmt:message key="train.code" /></th>
-            <th><fmt:message key="train.name" /></th>
+            <th>Id</th>
+            <th>Departure station</th>
+            <th>Arriving station</th>
+            <th>Departure date</th>
+            <th>Status</th>
         </tr>
 
-        <c:forEach items="${trains}" var="train">
+        <c:forEach items="${orders}" var="order">
             <tr>
-                <td>${train.getId()}</td>
-                <td>${train.getCode()}</td>
-                <td>${train.getName()}</td>
+                <td>${order.getId()}</td>
+                <td>${order.getDepartureStation()}</td>
+                <td>${order.getDestinationStation()}</td>
+                <td>${order.getDepartureDate()}</td>
+                <td>${order.getStatus()}</td>
             </tr>
         </c:forEach>
     </table>
@@ -52,7 +56,7 @@
     <ul class="pagination">
         <c:if test="${page != 1}">
             <li class="page-item"><a class="page-link"
-                                     href="trains?lang=${lang}&page=${page-1}"><fmt:message key="prev" /></a>
+                                     href="orders?lang=${lang}&page=${page-1}"><fmt:message key="prev" /></a>
             </li>
         </c:if>
 
@@ -65,7 +69,7 @@
                 </c:when>
                 <c:otherwise>
                     <li class="page-item"><a class="page-link"
-                                             href="trains?lang=${lang}&page=${i}">${i}</a>
+                                             href="orders?lang=${lang}&page=${i}">${i}</a>
                     </li>
                 </c:otherwise>
             </c:choose>
@@ -73,7 +77,7 @@
 
         <c:if test="${page lt noOfPages}">
             <li class="page-item"><a class="page-link"
-                                     href="trains?lang=${lang}&page=${page+1}"><fmt:message key="next" /></a>
+                                     href="orders?lang=${lang}&page=${page+1}"><fmt:message key="next" /></a>
             </li>
         </c:if>
     </ul>

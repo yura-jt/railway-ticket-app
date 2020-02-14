@@ -34,7 +34,7 @@ public class TariffServiceImpl implements TariffService {
     public BigDecimal getRate(CarriageType carriageType) {
         Tariff tariff = tariffDao.getTariffByCarriageType(carriageType).orElse(null);
         tariffValidator.isValid(tariff);
-        return tariff.getRate();
+        return tariff != null ? tariff.getRate() : BigDecimal.ZERO;
     }
 
     @Override

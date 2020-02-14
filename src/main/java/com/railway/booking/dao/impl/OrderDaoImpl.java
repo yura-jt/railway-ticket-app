@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
@@ -27,14 +29,15 @@ public class OrderDaoImpl extends AbstractCrudDaoImpl<Order> {
 
     @Override
     protected Order mapResultSetToEntity(ResultSet resultSet) throws SQLException {
+        Date date = resultSet.getDate("departure_date");
+        Timestamp timestamp = new Timestamp(date.getTime());
+        LocalDateTime dateTime = timestamp.toLocalDateTime();
+
         return Order.builder()
                 .withId(resultSet.getInt("id"))
                 .withDepartureStation(resultSet.getString("departure_station"))
                 .withDestinationStation(resultSet.getString("destination_station"))
-                .withDepartureDate(resultSet.getDate("departure_date")
-                        .toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime())
+                .withDepartureDate(dateTime)
                 .withFromTime(resultSet.getTime("from_time").toLocalTime())
                 .withToTime(resultSet.getTime("to_time").toLocalTime())
                 .withOrderStatus(OrderStatus.valueOf(resultSet.getString("status").toUpperCase()))

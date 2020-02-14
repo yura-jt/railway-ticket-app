@@ -3,24 +3,25 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.TrainDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Train;
+import com.railway.booking.service.PaginationUtil;
 import com.railway.booking.service.TrainService;
 import com.railway.booking.service.validator.TrainValidator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class TrainServiceImpl implements TrainService {
-    private static final Logger LOGGER = LogManager.getLogger(TrainServiceImpl.class);
+    private static final int TRAIN_PER_PAGE = 5;
 
-    private static final Integer TRAIN_PER_PAGE = 5;
     private final TrainValidator trainValidator;
     private final TrainDao trainDao;
+    private final PaginationUtil paginationUtil;
 
-    public TrainServiceImpl(TrainDao trainDao, TrainValidator trainValidator) {
+
+    public TrainServiceImpl(TrainDao trainDao, TrainValidator trainValidator, PaginationUtil paginationUtil) {
         this.trainDao = trainDao;
         this.trainValidator = trainValidator;
+        this.paginationUtil = paginationUtil;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class TrainServiceImpl implements TrainService {
 
     @Override
     public List<Train> findAll(int pageNumber) {
-        int maxPage = getMaxPage();
+        int maxPage = paginationUtil.getMaxPage(count(), TRAIN_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
@@ -43,7 +44,7 @@ public class TrainServiceImpl implements TrainService {
     @Override
     public List<Train> getTrainScheduleByDate(LocalDate localDate, int pageNumber) {
         trainValidator.validateDate(localDate);
-        int maxPage = getMaxPage();
+        int maxPage = paginationUtil.getMaxPage(count(), TRAIN_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
@@ -53,12 +54,8 @@ public class TrainServiceImpl implements TrainService {
         return trainDao.findAllByFlightDate(localDate, new Page(pageNumber, TRAIN_PER_PAGE));
     }
 
-    private int getMaxPage() {
-        int totalUsers = (int) trainDao.count();
-        int page = totalUsers / TRAIN_PER_PAGE;
-        if (totalUsers % TRAIN_PER_PAGE != 0) {
-            page++;
-        }
-        return page == 0 ? 1 : page;
+    @Override
+    public Integer count() {
+        return (int) trainDao.count();
     }
 }

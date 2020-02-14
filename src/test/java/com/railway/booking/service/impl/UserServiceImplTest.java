@@ -2,13 +2,11 @@ package com.railway.booking.service.impl;
 
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
-import com.railway.booking.entity.User;
 import com.railway.booking.entity.RoleType;
+import com.railway.booking.entity.User;
+import com.railway.booking.service.PaginationUtil;
 import com.railway.booking.service.PasswordEncryptor;
-import com.railway.booking.service.exception.EntityAlreadyExistException;
-import com.railway.booking.service.exception.EntityNotFoundException;
 import com.railway.booking.service.validator.UserValidator;
-import com.railway.booking.service.validator.ValidateException;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -26,10 +24,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,8 +54,13 @@ public class UserServiceImplTest {
 
     @Mock
     private PasswordEncryptor passwordEncryptor;
+
     @Mock
     private UserValidator userValidator;
+
+    @Mock
+    private PaginationUtil paginationUtil;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -81,7 +83,6 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotLoginAsThereIsNotUserWithSuchEmail() {
-//        expectedException.expect(EntityNotFoundException.class);
         when(passwordEncryptor.encrypt(eq(PASSWORD))).thenReturn(ENCODED_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.empty());
 
@@ -94,9 +95,6 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotLoginAsPasswordIsIncorrect() {
-//        expectedException.expect(EntityNotFoundException.class);
-//        expectedException.expectMessage("User with email: " + USER_EMAIL +
-//                " is not registered or password is not correct");
         when(passwordEncryptor.encrypt(eq(INCORRECT_PASSWORD))).thenReturn(ENCODE_INCORRECT_PASSWORD);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(USER));
 
@@ -121,8 +119,6 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotRegisterWithInvalidPasswordOrEmail() {
-//        expectedException.expect(ValidateException.class);
-//        doThrow(ValidateException.class).when(userValidator).isValid(any(User.class));
         when(userValidator.isValid(any(User.class))).thenReturn(false);
 
         userService.register(USER);
@@ -131,7 +127,6 @@ public class UserServiceImplTest {
 
     @Test
     public void userShouldNotRegisterAsEmailIsAlreadyUsed() {
-//        expectedException.expect(EntityAlreadyExistException.class);
         when(userValidator.isValid(any(User.class))).thenReturn(false);
         when(userDao.findByEmail(anyString())).thenReturn(Optional.of(USER));
         when(userDao.save(any(User.class))).thenReturn(false);
@@ -181,9 +176,10 @@ public class UserServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
+        when(paginationUtil.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(userDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
-        final List<User> actual = userService.findAll("1");
+        final List<User> actual = userService.findAll(1);
         assertEquals(Collections.EMPTY_LIST, actual);
     }
 

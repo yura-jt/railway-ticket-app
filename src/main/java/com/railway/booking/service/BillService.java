@@ -13,4 +13,6 @@ public interface BillService {
     List<Bill> findAll(int pageNumber);
 
     void update(Bill bill);
+
+    Integer count();
 }
