@@ -3,8 +3,8 @@ package com.railway.booking.dao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class PageUtil {
-    private static final Logger LOGGER = LogManager.getLogger(PageUtil.class);
+public class PageProvider {
+    private static final Logger LOGGER = LogManager.getLogger(PageProvider.class);
 
     public int getPageNumberFromString(String page) {
         int result = 1;

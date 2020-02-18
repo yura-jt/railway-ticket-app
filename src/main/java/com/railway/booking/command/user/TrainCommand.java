@@ -1,7 +1,7 @@
 package com.railway.booking.command.user;
 
 import com.railway.booking.command.Command;
-import com.railway.booking.dao.PageUtil;
+import com.railway.booking.dao.PageProvider;
 import com.railway.booking.entity.Train;
 import com.railway.booking.service.TrainService;
 
@@ -13,19 +13,19 @@ public class TrainCommand implements Command {
     private static final int TRAIN_PER_PAGE = 5;
 
     private final TrainService trainService;
-    private final PageUtil pageUtil;
+    private final PageProvider pageProvider;
 
-    public TrainCommand(TrainService trainService, PageUtil pageUtil) {
+    public TrainCommand(TrainService trainService, PageProvider pageProvider) {
         this.trainService = trainService;
-        this.pageUtil = pageUtil;
+        this.pageProvider = pageProvider;
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String page = request.getParameter("page");
-        int pageNumber = pageUtil.getPageNumberFromString(page);
+        int pageNumber = pageProvider.getPageNumberFromString(page);
 
-        List < Train > trains = trainService.findAll(pageNumber);
+        List<Train> trains = trainService.findAll(pageNumber);
         request.setAttribute("trains", trains);
 
         int size = trainService.count();

@@ -1,7 +1,7 @@
 package com.railway.booking.command.user;
 
 import com.railway.booking.command.Command;
-import com.railway.booking.dao.PageUtil;
+import com.railway.booking.dao.PageProvider;
 import com.railway.booking.entity.Order;
 import com.railway.booking.service.OrderService;
 
@@ -13,17 +13,17 @@ public class OrderCommand implements Command {
     private static final int ORDER_PER_PAGE = 5;
 
     private final OrderService orderService;
-    private final PageUtil pageUtil;
+    private final PageProvider pageProvider;
 
-    public OrderCommand(OrderService orderService, PageUtil pageUtil) {
+    public OrderCommand(OrderService orderService, PageProvider pageProvider) {
         this.orderService = orderService;
-        this.pageUtil = pageUtil;
+        this.pageProvider = pageProvider;
     }
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         String page = request.getParameter("page");
-        int pageNumber = pageUtil.getPageNumberFromString(page);
+        int pageNumber = pageProvider.getPageNumberFromString(page);
 
         List<Order> orders = orderService.findAll(pageNumber);
         request.setAttribute("orders", orders);

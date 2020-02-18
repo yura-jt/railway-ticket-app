@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.User;
-import com.railway.booking.service.PaginationUtil;
+import com.railway.booking.service.Paginator;
 import com.railway.booking.service.PasswordEncryptor;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
@@ -22,15 +22,15 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncryptor passwordEncryptor;
     private final UserDao userDao;
     private final UserValidator userValidator;
-    private final PaginationUtil paginationUtil;
+    private final Paginator paginator;
 
 
     public UserServiceImpl(UserDao userDao, UserValidator userValidator, PasswordEncryptor passwordEncryptor,
-                           PaginationUtil paginationUtil) {
+                           Paginator paginator) {
         this.userDao = userDao;
         this.userValidator = userValidator;
         this.passwordEncryptor = passwordEncryptor;
-        this.paginationUtil = paginationUtil;
+        this.paginator = paginator;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll(int pageNumber) {
-        int maxPage = paginationUtil.getMaxPage((int) userDao.count(), USER_PER_PAGE);
+        int maxPage = paginator.getMaxPage((int) userDao.count(), USER_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {

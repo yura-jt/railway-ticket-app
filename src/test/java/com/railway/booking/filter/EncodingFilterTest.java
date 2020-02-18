@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 public class EncodingFilterTest {
 
     @Test
-    public void testDoFilterCorrecSetCorrectEncoding() throws ServletException, IOException {
+    public void testDoFilterCorrectSetCorrectEncoding() throws ServletException, IOException {
         HttpServletRequest httpServletRequest = mock(HttpServletRequest.class);
         HttpServletResponse httpServletResponse = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
@@ -25,6 +25,8 @@ public class EncodingFilterTest {
         EncodingFilter filter = new EncodingFilter();
         filter.doFilter(httpServletRequest, httpServletResponse,
                 filterChain);
+
         verify(httpServletRequest).setCharacterEncoding("UTF-8");
+        verify(filterChain).doFilter(httpServletRequest, httpServletResponse);
     }
 }

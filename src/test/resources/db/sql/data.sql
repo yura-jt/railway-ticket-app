@@ -1,7 +1,7 @@
 INSERT INTO users (first_name, last_name, email, phone_number, password, role_type)
 VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'PASSENGER'),
        ('Jobe', 'Smith', 'lawnmower@gmail.com', '+380509998877', 'passwordT2', 'ADMIN'),
-       ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'admin', 'ADMIN');
+       ('Kaleb', 'Jordan', 'dr.noble@gmail.com', '+43125333564', 'adminADMIN2', 'ADMIN');
 
 INSERT INTO trains (code, name)
 VALUES ('43K', 'Подільський експрес'),

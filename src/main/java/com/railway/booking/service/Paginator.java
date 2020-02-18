@@ -1,6 +1,6 @@
 package com.railway.booking.service;
 
-public class PaginationUtil {
+public class Paginator {
 
     public int getMaxPage(int totalItems, int itemPerPage) {
         int page = totalItems / itemPerPage;

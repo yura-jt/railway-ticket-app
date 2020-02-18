@@ -20,7 +20,7 @@ public class SecurityFilter implements Filter {
         final String path = request.getRequestURI();
         final User user = (User) request.getSession().getAttribute("user");
 
-        if (user != null && path.contains("manage") && user.getRoleType() != RoleType.ADMIN) {
+        if (user != null && path.contains("admin") && user.getRoleType() != RoleType.ADMIN) {
             request.getRequestDispatcher("view/access_denied.jsp").forward(request, servletResponse);
             return;
         }
