@@ -1,5 +1,3 @@
-USE booking;
-
 INSERT INTO users (first_name, last_name, email, phone_number, password, role_type)
 VALUES ('John', 'McClane', 'bruce@gmail.com', '+380991234567', 'passwordT1', 'PASSENGER'),
        ('Jobe', 'Smith', 'lawnmower@gmail.com', '+380509998877', 'passwordT2', 'ADMIN'),

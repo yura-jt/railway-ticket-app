@@ -14,11 +14,6 @@ Email is a unique value.
 - All foreign keys should be named according to the following rule "table_name_reference_table_name_FK"
 - All alternative keys (unique) should be named according to the following rule "table_name_column_name_AK"
 */
-CREATE DATABASE IF NOT EXISTS booking
-    CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
-USE booking;
-
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS stations;
