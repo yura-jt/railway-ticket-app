@@ -1,19 +1,3 @@
-/*
-Railway ticket database stores information about user accounts, tickets, orders,  bills
-and train/seats information.
-
-Each user has stored first and last names, email, phone number and password which are mandatory.
-Email is a unique value.
-
-  TECH NOTES AND NAMING CONVENTION
-- All tables, columns and constraints are named using "snake case" naming convention
-- All table names must be plural (e.g. "users", not "user")
-- All tables (except link tables) should have a single-value identifier of type INT(10), which is a primary key
-- All primary key, foreign key, and unique constraint should be named according to the naming convention.
-
-- All foreign keys should be named according to the following rule "table_name_reference_table_name_FK"
-- All alternative keys (unique) should be named according to the following rule "table_name_column_name_AK"
-*/
 DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS stations;
