@@ -1,6 +1,8 @@
 package com.railway.booking.context;
 
 import com.railway.booking.command.Command;
+import com.railway.booking.command.admin.PanelCommand;
+import com.railway.booking.command.error.AccessDeniedCommand;
 import com.railway.booking.command.user.BillCommand;
 import com.railway.booking.command.user.LoginCommand;
 import com.railway.booking.command.user.LoginFormCommand;
@@ -88,7 +90,7 @@ public class ApplicationInjector {
 
     static {
         COMMANDS.put("login", new LoginCommand(USER_SERVICE));
-        COMMANDS.put("logout", new LogoutCommand(USER_SERVICE));
+        COMMANDS.put("logout", new LogoutCommand());
         COMMANDS.put("registration", new RegistrationCommand(USER_SERVICE));
         COMMANDS.put("registrationForm", new RegistrationFormCommand());
         COMMANDS.put("loginForm", new LoginFormCommand());
@@ -97,6 +99,8 @@ public class ApplicationInjector {
         COMMANDS.put("bills", new BillCommand(BILL_SERVICE, PAGE_UTIL));
         COMMANDS.put("orders", new OrderCommand(ORDER_SERVICE, PAGE_UTIL));
         COMMANDS.put("tickets", new TicketCommand(TICKET_SERVICE, PAGE_UTIL));
+        COMMANDS.put("adminPanel", new PanelCommand());
+        COMMANDS.put("access_denied", new AccessDeniedCommand());
     }
 
     private ApplicationInjector() {
