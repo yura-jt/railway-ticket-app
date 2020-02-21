@@ -28,22 +28,23 @@ public class LoginCommand implements Command {
         User user = getLoggedUser(email, password);
 
         if (user == null) {
+            LOGGER.warn(String.format("Failed login attempt: from user with email: %s. " +
+                    "User was not found with provided credentials", email));
             return "view/login.jsp";
         }
 
-        setUserAndRoleToSession(request, user, email);
+        setUserAndRoleToSession(request, user);
 
         if (user.getRoleType() == RoleType.ADMIN) {
-            return "view/admin.jsp";
+            return "view/admin/adminPanel.jsp";
         } else {
             return "view/profile.jsp";
         }
     }
 
-    private void setUserAndRoleToSession(HttpServletRequest request, User user, String email) {
+    private void setUserAndRoleToSession(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
-        session.setAttribute("user", user);
-        session.setAttribute("email", email);
+        session.setAttribute("userFirstName", user.getFirstName());
         session.setAttribute("role", user.getRoleType());
     }
 

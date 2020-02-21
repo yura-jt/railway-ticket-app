@@ -86,12 +86,10 @@ public class LoginCommandTest {
         when(request.getParameter("password")).thenReturn(EXISTED_PASSWORD);
         HttpSession httpSession = mock(HttpSession.class);
         when(request.getSession()).thenReturn(httpSession);
-        doNothing().when(httpSession).setAttribute(eq("user"), any());
-        doNothing().when(httpSession).setAttribute(eq("email"), any());
         doNothing().when(httpSession).setAttribute(eq("role"), any());
 
         when(userService.login(WRONG_EMAIL, EXISTED_PASSWORD)).thenReturn(ADMIN);
 
-        assertEquals("view/admin.jsp", loginCommand.execute(request, response));
+        assertEquals("view/admin/adminPanel.jsp", loginCommand.execute(request, response));
     }
 }

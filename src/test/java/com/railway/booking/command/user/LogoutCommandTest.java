@@ -45,7 +45,7 @@ public class LogoutCommandTest {
     @Test
     public void executeShouldReturnCorrectView() {
         when(request.getSession()).thenReturn(httpSession);
-        LogoutCommand logoutCommand = new LogoutCommand(userService);
+        LogoutCommand logoutCommand = new LogoutCommand();
         String actualView = logoutCommand.execute(request, response);
 
         assertEquals(EXPECTED_VIEW, actualView);
@@ -58,7 +58,8 @@ public class LogoutCommandTest {
         logoutCommand.execute(request, response);
 
         verify(request, times(1)).getSession();
-        verify(httpSession, times(1)).removeAttribute("user");
+        verify(httpSession, times(1)).removeAttribute("userFirstName");
+        verify(httpSession, times(1)).removeAttribute("role");
         verify(httpSession, times(1)).invalidate();
     }
 }

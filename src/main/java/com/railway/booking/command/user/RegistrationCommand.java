@@ -42,7 +42,7 @@ public class RegistrationCommand implements Command {
                 .build();
 
         if (userService.register(user)) {
-            return "/view/profile.jsp";
+            return "/view/login.jsp";
         }
         return "/view/registration.jsp";
     }
