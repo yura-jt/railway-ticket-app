@@ -4,7 +4,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 <%@ page isELIgnored="false"%>
 
-<fmt:setLocale value="${param.lang}" />
+<fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">

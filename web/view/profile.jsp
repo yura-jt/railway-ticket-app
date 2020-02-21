@@ -6,10 +6,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page isELIgnored="false"%>
 
-<fmt:setLocale value="${param.lang}" />
+<fmt:setLocale value="${sessionScope.lang}" />
 <fmt:setBundle basename="messages" />
 
-<html lang="${param.lang}">
+<html lang="${sessionScope.lang}">
 
 <head>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.css" rel="stylesheet"/>
