@@ -13,23 +13,32 @@ public class InternalizationFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         final HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String requestParam = servletRequest.getParameter("lang");
+        String sessionParam = (String) request.getSession().getAttribute("lang");
 
-        String localeName = servletRequest.getParameter("lang");
-        if (!isValidLangParam(localeName)) {
-            localeName = "en";
-        }
+        String localeName = getLocalName(requestParam, sessionParam);
+
         request.getSession().setAttribute("lang", localeName);
 
         filterChain.doFilter(request, servletResponse);
+    }
+
+    private String getLocalName(String requestParam, String sessionParam) {
+        boolean isSessionParamEmpty = sessionParam == null;
+
+        if (isSessionParamEmpty && !isValidLangParam(requestParam)) {
+            return "en";
+        } else if (!isSessionParamEmpty && !isValidLangParam(requestParam)) {
+            return sessionParam;
+        } else {
+            return requestParam;
+        }
     }
 
     private boolean isValidLangParam(String localeName) {
         if (localeName == null) {
             return false;
         }
-        if (localeName.equals("en") || localeName.equals("ru") || localeName.equals("ua")) {
-            return true;
-        }
-        return false;
+        return localeName.equals("en") || localeName.equals("ru") || localeName.equals("ua");
     }
 }
