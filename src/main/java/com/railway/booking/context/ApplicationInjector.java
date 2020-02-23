@@ -3,6 +3,7 @@ package com.railway.booking.context;
 import com.railway.booking.command.Command;
 import com.railway.booking.command.admin.PanelCommand;
 import com.railway.booking.command.error.AccessDeniedCommand;
+import com.railway.booking.command.error.PageNotFoundCommand;
 import com.railway.booking.command.user.BillCommand;
 import com.railway.booking.command.user.LoginCommand;
 import com.railway.booking.command.user.LoginFormCommand;
@@ -101,6 +102,7 @@ public class ApplicationInjector {
         COMMANDS.put("tickets", new TicketCommand(TICKET_SERVICE, PAGE_UTIL));
         COMMANDS.put("adminPanel", new PanelCommand());
         COMMANDS.put("access_denied", new AccessDeniedCommand());
+        COMMANDS.put("error", new PageNotFoundCommand());
     }
 
     private ApplicationInjector() {

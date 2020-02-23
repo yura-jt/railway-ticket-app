@@ -22,7 +22,6 @@
             <li><a href="<my:replaceParameter name='lang' value='ua' />"><fmt:message key="switch.ua" /></a></li>
             <li><a href="<my:replaceParameter name='lang' value='ru' />"><fmt:message key="switch.ru" /></a></li>
 
-
         </ul>
     </h5>
 </div>
