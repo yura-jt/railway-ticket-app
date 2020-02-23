@@ -20,7 +20,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LogoutCommandTest {
-    private static final String EXPECTED_VIEW = "view/oldLogin.jsp";
+    private static final String EXPECTED_VIEW = "view/login.jsp";
 
     @Mock
     private HttpServletRequest request;

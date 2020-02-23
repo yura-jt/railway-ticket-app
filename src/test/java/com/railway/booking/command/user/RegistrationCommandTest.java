@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RegistrationCommandTest {
-    private static final String EXPECTED_SUCCESSFUL_REGISTER_VIEW = "/view/oldLogin.jsp";
+    private static final String EXPECTED_SUCCESSFUL_REGISTER_VIEW = "/view/login.jsp";
     private static final String EXPECTED_FAIL_REGISTER_VIEW = "/view/registration.jsp";
     private static final String EXPECTED_MISMATCH_REGISTER_VIEW = "registrationForm";
     private static final String FIRST_NAME = "Isaac";

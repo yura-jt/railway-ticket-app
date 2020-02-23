@@ -15,7 +15,7 @@ import static org.mockito.Mockito.reset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ProfileCommandTest {
-    private static final String EXPECTED_VIEW = "/view/oldProfile.jsp";
+    private static final String EXPECTED_VIEW = "/view/profile.jsp";
 
     @Mock
     private HttpServletRequest request;
