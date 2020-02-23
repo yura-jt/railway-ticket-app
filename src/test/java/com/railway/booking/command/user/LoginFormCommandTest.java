@@ -15,7 +15,7 @@ import static org.mockito.Mockito.reset;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoginFormCommandTest {
-    private static final String EXPECTED_VIEW = "/view/login.jsp";
+    private static final String EXPECTED_VIEW = "/view/oldLogin.jsp";
 
     @Mock
     private HttpServletRequest request;

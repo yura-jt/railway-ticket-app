@@ -1,42 +1,46 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page isELIgnored="false"%>
-
-<fmt:setLocale value="${sessionScope.lang}" />
-<fmt:setBundle basename="messages" />
-
-
-
-<html lang="${sessionScope.lang}">
+<%@include file="template/resources.jsp" %>
 <!DOCTYPE html>
-<html>
+<html lang="${sessionScope.lang}" class="no-js">
 <head>
-    <title>railway-ticket-booking/registration</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <%@include file="template/head.jsp" %>
     <style>
-        <%@ include file="/css/main.css" %>
+        <%@ include file="/css/register.css" %>
     </style>
 </head>
 <body>
 <div class="container">
-    <h5>
-        <a href="loginForm" style="background-color:#EB7035;border:1px solid #EB7035;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;"> &larr; <fmt:message key="proceed.login" /></a>
-    </h5>
+    <img src="http://i.piccy.info/i9/b869ed99199dbc216732e7b323ecd45f/1582457398/16646/1364039/train_logo_400px.jpg"
+         alt="" width="399" height="98"/>
+    <header class="clearfix">
 
-        <ul>
-            <li><a href="registrationForm?lang=en"><fmt:message key="switch.en" /></a></li>
-            <li><a href="registrationForm?lang=ua"><fmt:message key="switch.ua" /></a></li>
-            <li><a href="registrationForm?lang=ru"><fmt:message key="switch.ru" /></a></li>
-        </ul>
+        <span><fmt:message key="app.title"/></span>
+        <nav>
+            <a href="registrationForm?lang=en" class="bp-icon bp-icon-next"
+               data-info="<fmt:message key="switch.en" />"><span><fmt:message key="switch.en"/></span></a>
+            <a href="registrationForm?lang=ua" class="bp-icon bp-icon-drop"
+               data-info="<fmt:message key="switch.ua" />"><span><fmt:message key="switch.ua"/></span></a>
+            <a href="registrationForm?lang=ru" class="bp-icon bp-icon-archive"
+               data-info="<fmt:message key="switch.ru" />"><span><fmt:message key="switch.ru"/></span></a>
+        </nav>
+        <h5>
+            <a href="loginForm" style="background-color:#4390ff;border:1px solid #4390ff;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;"> &larr; <fmt:message key="proceed.login" /></a>
+        </h5>
+    </header>
+    <div class="main">
+        <nav class="cbp-hsmenu-wrapper" id="cbp-hsmenu-wrapper">
+            <div class="cbp-hsinner">
+                <ul class="cbp-hsmenu">
+
+                </ul>
+            </div>
+        </nav>
+    </div>
 
 
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><fmt:message key="register.title" /></div>
+                <div class="card-header"><h4><fmt:message key="register.title" /></h4></div>
                 <div class="card-body">
 
                     <form class="form-horizontal" method="post" action="registration">
@@ -98,8 +102,8 @@
                         <label class="cols-sm-2 control-label"><fmt:message key="mandatory.field" /> </label>
                         <div class="form-group ">
                             <button type="submit" name="registrationButton" class="btn btn-primary btn-lg btn-block login-button"><fmt:message key="register.button" /></button>
-<%--                            <input type="submit" value="Submit" />--%>
-<%--                            <div align="center"><a href="registration"><fmt:message key="register.button"/></a></div>--%>
+                            <%--                            <input type="submit" value="Submit" />--%>
+                            <%--                            <div align="center"><a href="registration"><fmt:message key="register.button"/></a></div>--%>
                         </div>
                     </form>
                     <script type="text/javascript">
@@ -110,16 +114,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>
-
-<%--<div class="register">--%>
-<%--    <form method="post" action="${pageContext.request.contextPath}/controller?command=login">--%>
-<%--        <p><input type="email" name="email" placeholder="Email" size="22" required/></p>--%>
-<%--        <p><input type="password" name="password" placeholder="<fmt:message key="label.password" />"--%>
-<%--                  size="22"--%>
-<%--                  pattern="[A-Za-zА-Яа-яЁёІіЄєЇї0-9]{5,}" required/></p>--%>
-<%--        <p><input type="submit" value="<fmt:message key="label.signIn"/>"/></p>--%>
-<%--    </form>--%>

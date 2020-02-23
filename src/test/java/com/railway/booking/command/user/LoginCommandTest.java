@@ -65,7 +65,7 @@ public class LoginCommandTest {
 
         when(userService.login(EXISTED_EMAIL, EXISTED_PASSWORD)).thenReturn(USER);
 
-        assertEquals("view/profile.jsp", loginCommand.execute(request, response));
+        assertEquals("view/oldProfile.jsp", loginCommand.execute(request, response));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class LoginCommandTest {
 
         when(userService.login(WRONG_EMAIL, EXISTED_PASSWORD)).thenReturn(null);
 
-        assertEquals("view/login.jsp", loginCommand.execute(request, response));
+        assertEquals("view/oldLogin.jsp", loginCommand.execute(request, response));
     }
 
     @Test

@@ -1,0 +1,50 @@
+.cbp-hsmenu-wrapper .cbp-hsmenu {
+    width: 90%;
+    max-width: 69em;
+    margin-top: 0;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-right: 0.125em;
+    padding-left: 0.125em;
+    padding-bottom: 0;
+}
+
+.cbp-hsmenu > li {
+    margin-left: 2em;
+    display: inline-block;
+}
+
+.cbp-hsinner {
+    background: #da5851;
+    position: relative;
+    z-index: 100;
+}
+
+.cbp-hsmenu > li.cbp-hsitem-open > a {
+    color: #da5851;
+}
+
+.cbp-hsmenu > li.cbp-hsitem-open > a:after {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: transparent;
+    border-top-color: #da5851;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+}
+
+h1 {
+    margin-bottom: .5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #da5851;
+}

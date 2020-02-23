@@ -3,8 +3,35 @@ html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background: #60a3bc !important;
+    background: #f8ffff !important;
 }
+.container > header {
+    width: 90%;
+    max-width: 69em;
+    margin: 0 auto;
+    padding-top: 0.250em;
+    padding-right: 1.875em;
+    padding-left: 1.875em;
+    padding-bottom: 1.875em;
+}
+
+.card-header {
+    padding: .75rem 1.25rem;
+    margin-bottom: 0;
+    background-color: rgb(67, 144, 255);
+    border-bottom: 1px solid
+    rgba(0,0,0,.125);
+    text-align: center;
+}
+
+h3, h4, h5, h6 {
+    margin-bottom: .5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: #fcfef9;
+}
+
 .user_card {
     height: 400px;
     width: 350px;
