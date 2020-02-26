@@ -23,7 +23,7 @@
 				<nav class="cbp-hsmenu-wrapper" id="cbp-hsmenu-wrapper">
 					<div class="cbp-hsinner">
 						<ul class="cbp-hsmenu">
-							<li><a href="#"><fmt:message key="profile.make.order" /></a></li>
+							<li><a href="orderForm"><fmt:message key="profile.make.order" /></a></li>
 							<li><a href="trains"><fmt:message key="profile.tran.schedule" /></a></li>
 							<li><a href="tickets"><fmt:message key="profile.my.tickets" /></a></li>
 							<li><a href="bills"><fmt:message key="profile.my.bills" /></a></li>

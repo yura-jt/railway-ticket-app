@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.TrainDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Train;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.service.validator.TrainValidator;
 import org.junit.After;
 import org.junit.Rule;
@@ -47,14 +47,14 @@ public class TrainServiceImplTest {
     private TrainValidator trainValidator;
 
     @Mock
-    private Paginator paginator;
+    private PageProvider pageProvider;
 
     @InjectMocks
     private TrainServiceImpl trainService;
 
     @After
     public void resetMocks() {
-        reset(trainDao, trainValidator, paginator);
+        reset(trainDao, trainValidator, pageProvider);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class TrainServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
-        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(1);
+        when(pageProvider.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(trainDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
         final List<Train> actual = trainService.findAll(1);

@@ -28,7 +28,7 @@ public class SecurityFilterTest {
     private static final String CONTEXT_PATH = "/railway/";
     private static final RoleType ADMIN_ROLE = RoleType.ADMIN;
     private static final RoleType PASSENGER_ROLE = RoleType.PASSENGER;
-    private static final String PAGE_403 = "view/access_denied.jsp";
+    private static final String PAGE_403 = "view/accessDenied.jsp";
 
     @Mock
     HttpServletRequest request;

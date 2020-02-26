@@ -69,7 +69,7 @@ public abstract class AbstractCrudDaoImpl<E> implements CrudDao<E> {
     }
 
     public boolean save(E entity) {
-        boolean isSaved = false;
+        boolean isSaved;
         try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(saveQuery)) {
             insert(preparedStatement, entity);
             preparedStatement.execute();

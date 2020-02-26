@@ -27,7 +27,7 @@ public class UserValidator implements Validator<User> {
 
     @Override
     public void validateId(Integer id) {
-        if (id == null || id < 0) {
+        if (id == null || id <= 0) {
             String message = String.format("FindByEmail service failed, " +
                     "provided user id: %d couldn't be null or negative", id);
             LOGGER.warn(message);

@@ -2,8 +2,11 @@ package com.railway.booking.dao.impl;
 
 import com.railway.booking.dao.DatabaseConnector;
 import com.railway.booking.dao.UserDao;
-import com.railway.booking.entity.User;
+import com.railway.booking.dao.exception.DatabaseSqlRuntimeException;
 import com.railway.booking.entity.RoleType;
+import com.railway.booking.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +14,8 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
+    private static final Logger LOGGER = LogManager.getLogger(AbstractCrudDaoImpl.class);
+
     private static final String FIND_BY_ID_QUERY = "SELECT * FROM users WHERE id = ?";
     private static final String FIND_BY_EMAIL_QUERY = "SELECT * FROM users WHERE email = ?";
     private static final String SAVE_QUERY =
@@ -28,6 +33,19 @@ public class UserDaoImpl extends AbstractCrudDaoImpl<User> implements UserDao {
     @Override
     public Optional<User> findByEmail(String email) {
         return findByParam(email, FIND_BY_EMAIL_QUERY);
+    }
+
+    @Override
+    public boolean deleteUserById(Integer id) throws DatabaseSqlRuntimeException{
+        try (final PreparedStatement preparedStatement = connector.getConnection().prepareStatement(DELETE_BY_ID_QUERY)) {
+            preparedStatement.setObject(1, id);
+            preparedStatement.execute();
+            return true;
+        } catch (SQLException e) {
+            String message = String.format("Fail to execute delete by id query with id: %d", id);
+            LOGGER.warn(message, e);
+            throw new DatabaseSqlRuntimeException(message, e);
+        }
     }
 
     @Override

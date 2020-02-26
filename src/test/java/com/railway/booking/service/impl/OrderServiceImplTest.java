@@ -1,10 +1,10 @@
 package com.railway.booking.service.impl;
 
-import com.railway.booking.dao.CrudDao;
+import com.railway.booking.dao.OrderDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Order;
 import com.railway.booking.entity.OrderStatus;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.service.validator.OrderValidator;
 import org.junit.After;
 import org.junit.Rule;
@@ -48,13 +48,13 @@ public class OrderServiceImplTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @Mock
-    private CrudDao<Order> orderDao;
+    private OrderDao orderDao;
 
     @Mock
     private OrderValidator orderValidator;
 
     @Mock
-    private Paginator paginator;
+    private PageProvider pageProvider;
 
     @InjectMocks
     private OrderServiceImpl orderService;
@@ -85,7 +85,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void findAllShouldReturnCorrectList() {
-        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(PAGE_NUMBER);
+        when(pageProvider.getMaxPage(anyInt(), anyInt())).thenReturn(PAGE_NUMBER);
         when(orderDao.findAll(any())).thenReturn(Collections.EMPTY_LIST);
 
         List<Order> actual = orderService.findAll(PAGE_NUMBER);
@@ -96,7 +96,7 @@ public class OrderServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
-        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(1);
+        when(pageProvider.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(orderDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
         final List<Order> actual = orderService.findAll(1);

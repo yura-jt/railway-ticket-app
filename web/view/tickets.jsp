@@ -1,93 +1,116 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@include file="template/resources.jsp" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-<%@ page isELIgnored="false"%>
-
-<fmt:setLocale value="${sessionScope.lang}" />
-<fmt:setBundle basename="messages" />
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="${sessionScope.lang}" class="no-js">
 <head>
-    <title>My Tickets</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+    <%@include file="template/head.jsp" %>
+    <style>
+        <%@ include file="/css/item.css" %>
+    </style>
+    <style>
+        <%@ include file="/css/row.css" %>
+    </style>
+    <style>
+        <%@ include file="/css/item.css" %>
+    </style>
 </head>
-<body class="m-3">
-<div class="card-header">
-    <h3>My tickets</h3>
-    <h5>
-        <ul>
-            <li><a href="<my:replaceParameter name='lang' value='en' />"><fmt:message key="switch.en" /></a></li>
-            <li><a href="<my:replaceParameter name='lang' value='ua' />"><fmt:message key="switch.ua" /></a></li>
-            <li><a href="<my:replaceParameter name='lang' value='ru' />"><fmt:message key="switch.ru" /></a></li>
 
+<body>
+<div class="container">
+    <img src="http://i.piccy.info/i9/b869ed99199dbc216732e7b323ecd45f/1582457398/16646/1364039/train_logo_400px.jpg"
+         alt="" width="399" height="98"/>
+    <header class="clearfix">
 
-        </ul>
-    </h5>
-</div>
-<div class="row col-md-6">
-    <div class="alert alert-info">
-        <a href="profile" class="btn btn-xs btn-primary pull-right"><fmt:message key="profile.button" /></a>
-        <strong><fmt:message key="proceed.profile" /></strong>
+        <span><fmt:message key="app.title"/></span>
+        <h1><fmt:message key="tickets.title" /></h1>
+
+        <nav>
+            <a href="<my:replaceParameter name='lang' value='en' />" class="bp-icon bp-icon-next"
+               data-info="<fmt:message key="switch.en" />"><span><fmt:message key="switch.en"/></span></a>
+            <a href="<my:replaceParameter name='lang' value='ua' />" class="bp-icon bp-icon-drop"
+               data-info="<fmt:message key="switch.ua" />"><span><fmt:message key="switch.ua"/></span></a>
+            <a href="<my:replaceParameter name='lang' value='ru' />" class="bp-icon bp-icon-archive"
+               data-info="<fmt:message key="switch.ru" />"><span><fmt:message
+                    key="switch.ru"/></span></a>
+        </nav>
+    </header>
+    <div class="main">
+        <nav class="cbp-hsmenu-wrapper" id="cbp-hsmenu-wrapper">
+            <div class="cbp-hsinner">
+                <ul class="cbp-hsmenu">
+                    <li><a href="orderForm"><fmt:message key="profile.make.order"/></a></li>
+                    <li><a href="trains"><fmt:message key="profile.tran.schedule"/></a></li>
+                    <li><a href="tickets"><fmt:message key="profile.my.tickets"/></a></li>
+                    <li><a href="bills"><fmt:message key="profile.my.bills"/></a></li>
+                    <li><a href="orders"><fmt:message key="profile.my.orders"/></a></li>
+                    <li><a href="logout"><fmt:message key="profile.log.out"/></a></li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <table class="table table-striped table-bordered table-sm">
-        <tr>
-            <th>Id</th>
-            <th>Departure station</th>
-            <th>Destination station</th>
-            <th>Passenger name</th>
-            <th>Price</th>
-            <th>Created On</th>
-        </tr>
+    <h5>
+        <a href="profile" style="background-color:#4390ff;border:1px solid #4390ff;border-radius:3px;color:#ffffff;display:inline-block;font-family:sans-serif;font-size:16px;line-height:44px;text-align:center;text-decoration:none;width:150px;-webkit-text-size-adjust:none;mso-hide:all;"> &larr; <fmt:message key="proceed.login" /></a>
+    </h5>
+    <div class="row col-md-6">
 
-        <c:forEach items="${tickets}" var="ticket">
+        <table class="table table-striped table-bordered table-sm" >
             <tr>
-                <td>${ticket.getId()}</td>
-                <td>${ticket.getDepartureStation()}</td>
-                <td>${ticket.getDestinationStation()}</td>
-                <td>${ticket.getPassengerName()}</td>
-                <td>${ticket.getPrice()}</td>
-                <td>${ticket.getCreatedOn()}</td>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; ">id</span></th>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; "><fmt:message key="order.departure" /></span></th>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; "><fmt:message key="order.destination" /></span></th>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; "><fmt:message key="ticket.passenger.name" /></span></th>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; "><fmt:message key="bill.price" /></span></th>
+                <th style="width: 10px ; background-color:dodgerblue"><span style="color: white; "><fmt:message key="order.created" /></span></th>
             </tr>
-        </c:forEach>
-    </table>
+
+            <c:forEach items="${tickets}" var="ticket">
+                <tr>
+                    <td><span style="color: black; ">${ticket.getId()}</span></td>
+                    <td><span style="color: black; ">${ticket.getDepartureStation()}</span></td>
+                    <td><span style="color: black; ">${ticket.getDestinationStation()}</span></td>
+                    <td><span style="color: black; ">${ticket.getPassengerName()}</span></td>
+                    <td><span style="color: black; ">${ticket.getPrice()}</span></td>
+                    <td><span style="color: black; ">${ticket.getCreatedOn()}</span></td>
+                </tr>
+            </c:forEach>
+        </table>
+    </div>
+
+    <nav aria-label="Navigation for countries">
+        <ul class="pagination">
+            <c:if test="${page != 1}">
+                <li class="page-item"><a class="page-link"
+                                         href="tickets?lang=${lang}&page=${page-1}"><fmt:message key="prev" /></a>
+                </li>
+            </c:if>
+
+            <c:forEach begin="1" end="${noOfPages}" var="i">
+                <c:choose>
+                    <c:when test="${page eq i}">
+                        <li class="page-item active"><a class="page-link">
+                                ${i} <span class="sr-only">(current)</span></a>
+                        </li>
+                    </c:when>
+                    <c:otherwise>
+                        <li class="page-item"><a class="page-link"
+                                                 href="tickets?lang=${lang}&page=${i}">${i}</a>
+                        </li>
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+
+            <c:if test="${page lt noOfPages}">
+                <li class="page-item"><a class="page-link"
+                                         href="tickets?lang=${lang}&page=${page+1}"><fmt:message key="next" /></a>
+                </li>
+            </c:if>
+        </ul>
+    </nav>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
 </div>
-
-<nav aria-label="Navigation for countries">
-    <ul class="pagination">
-        <c:if test="${page != 1}">
-            <li class="page-item"><a class="page-link"
-                                     href="tickets?lang=${lang}&page=${page-1}"><fmt:message key="prev" /></a>
-            </li>
-        </c:if>
-
-        <c:forEach begin="1" end="${noOfPages}" var="i">
-            <c:choose>
-                <c:when test="${page eq i}">
-                    <li class="page-item active"><a class="page-link">
-                            ${i} <span class="sr-only">(current)</span></a>
-                    </li>
-                </c:when>
-                <c:otherwise>
-                    <li class="page-item"><a class="page-link"
-                                             href="tickets?lang=${lang}&page=${i}">${i}</a>
-                    </li>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-
-        <c:if test="${page lt noOfPages}">
-            <li class="page-item"><a class="page-link"
-                                     href="tickets?lang=${lang}&page=${page+1}"><fmt:message key="next" /></a>
-            </li>
-        </c:if>
-    </ul>
-</nav>
-
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-
 </body>
 </html>

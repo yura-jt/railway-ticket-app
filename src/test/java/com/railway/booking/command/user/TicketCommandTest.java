@@ -1,6 +1,6 @@
 package com.railway.booking.command.user;
 
-import com.railway.booking.dao.PageProvider;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.entity.Ticket;
 import com.railway.booking.service.TicketService;
 import org.junit.After;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -71,6 +72,7 @@ public class TicketCommandTest {
     public void executeShouldSetRightAttribute() {
         when(request.getParameter(PARAM)).thenReturn(STRING_PAGE);
         when(pageProvider.getPageNumberFromString(any())).thenReturn(PAGE_NUMBER);
+        when(pageProvider.getTotalPages(anyInt())).thenReturn(3);
         when(ticketService.findAll(PAGE_NUMBER)).thenReturn(TRAINS);
         when(ticketService.count()).thenReturn(COUNT);
 

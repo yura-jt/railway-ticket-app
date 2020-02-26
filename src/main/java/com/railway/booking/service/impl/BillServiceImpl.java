@@ -1,34 +1,37 @@
 package com.railway.booking.service.impl;
 
-import com.railway.booking.dao.CrudDao;
+import com.railway.booking.dao.BillDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Bill;
 import com.railway.booking.entity.BillStatus;
 import com.railway.booking.service.BillService;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.Constants;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.service.validator.BillValidator;
 
 import java.util.List;
 
 public class BillServiceImpl implements BillService {
-    private static final Integer MAX_BILL_PER_PAGE = 5;
-
-    private final CrudDao<Bill> billDao;
+    private final BillDao billDao;
     private final BillValidator billValidator;
-    private final Paginator paginator;
+    private final PageProvider pageProvider;
 
-    public BillServiceImpl(CrudDao<Bill> billDao, BillValidator billValidator,
-                           Paginator paginator) {
+    public BillServiceImpl(BillDao billDao, BillValidator billValidator,
+                           PageProvider pageProvider) {
         this.billDao = billDao;
         this.billValidator = billValidator;
-        this.paginator = paginator;
+        this.pageProvider = pageProvider;
+    }
+
+    @Override
+    public void saveBill(Bill bill) {
+        billDao.saveBill(bill);
     }
 
     @Override
     public void payBill(Bill bill) {
         billValidator.isValid(bill);
         Bill newBill = Bill.builder()
-                .withUser(bill.getUser())
                 .withPrice(bill.getPrice())
                 .withBillStatus(BillStatus.PAID)
                 .build();
@@ -54,12 +57,12 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public List<Bill> findAll(int pageNumber) {
-        int maxPage = paginator.getMaxPage(count(), MAX_BILL_PER_PAGE);
+        int maxPage = pageProvider.getMaxPage(count(), Constants.ITEM_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
             pageNumber = maxPage;
         }
-        return billDao.findAll(new Page(pageNumber, MAX_BILL_PER_PAGE));
+        return billDao.findAll(new Page(pageNumber, Constants.ITEM_PER_PAGE));
     }
 }

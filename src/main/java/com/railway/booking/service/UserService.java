@@ -1,6 +1,5 @@
 package com.railway.booking.service;
 
-import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.User;
 
 import java.util.List;
@@ -15,4 +14,7 @@ public interface UserService {
 
     User findById(Integer id);
 
+    Integer count();
+
+    boolean deleteUserById(Integer userId);
 }

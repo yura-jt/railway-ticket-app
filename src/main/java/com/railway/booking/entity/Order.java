@@ -1,9 +1,10 @@
 package com.railway.booking.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
-public class Order {
+public class Order implements Serializable {
     private final Integer id;
     private final String departureStation;
     private final String destinationStation;

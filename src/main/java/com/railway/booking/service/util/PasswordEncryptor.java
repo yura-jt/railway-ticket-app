@@ -1,4 +1,4 @@
-package com.railway.booking.service;
+package com.railway.booking.service.util;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +9,6 @@ import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.spec.InvalidKeySpecException;
-import java.util.Arrays;
 
 public class PasswordEncryptor {
     private static final Logger LOGGER = LogManager.getLogger(PasswordEncryptor.class);
@@ -25,7 +24,6 @@ public class PasswordEncryptor {
         char[] passwordChars = password.toCharArray();
         byte[] hash = new byte[0];
         try {
-
             PBEKeySpec spec = new PBEKeySpec(passwordChars, SALT, ITERATION_COUNT, KEY_LENGTH);
             SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
             hash = skf.generateSecret(spec).getEncoded();

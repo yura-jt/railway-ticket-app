@@ -3,7 +3,7 @@ package com.railway.booking.service.impl;
 import com.railway.booking.dao.CrudDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Ticket;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.PageProvider;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
@@ -44,14 +44,14 @@ public class TicketServiceImplTest {
     private CrudDao<Ticket> ticketDao;
 
     @Mock
-    private Paginator paginator;
+    private PageProvider pageProvider;
 
     @InjectMocks
     private TicketServiceImpl ticketService;
 
     @After
     public void resetMocks() {
-        reset(ticketDao, paginator);
+        reset(ticketDao, pageProvider);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TicketServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
-        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(1);
+        when(pageProvider.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(ticketDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
         final List<Ticket> actual = ticketService.findAll(1);

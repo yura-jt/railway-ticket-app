@@ -7,14 +7,12 @@ public class Bill {
     private final Integer orderId;
     private final BillStatus billStatus;
     private final BigDecimal price;
-    private final User user;
     private final LocalDateTime createdOn;
 
     private Bill(Builder builder) {
         this.orderId = builder.orderId;
         this.billStatus = builder.billStatus;
         this.price = builder.price;
-        this.user = builder.user;
         this.createdOn = builder.createdOn;
     }
 
@@ -30,10 +28,6 @@ public class Bill {
         return price;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public LocalDateTime getCreatedOn() {
         return createdOn;
     }
@@ -44,7 +38,6 @@ public class Bill {
                 "orderId=" + orderId +
                 ", status=" + billStatus +
                 ", price=" + price +
-                ", user=" + user +
                 ", createdOn=" + createdOn +
                 '}';
     }
@@ -57,7 +50,6 @@ public class Bill {
         private Integer orderId;
         private BillStatus billStatus;
         private BigDecimal price;
-        private User user;
         private LocalDateTime createdOn;
 
         private Builder() {
@@ -75,11 +67,6 @@ public class Bill {
 
         public Builder withPrice(BigDecimal price) {
             this.price = price;
-            return this;
-        }
-
-        public Builder withUser(User user) {
-            this.user = user;
             return this;
         }
 
