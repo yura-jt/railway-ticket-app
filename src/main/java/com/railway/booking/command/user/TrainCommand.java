@@ -1,17 +1,16 @@
 package com.railway.booking.command.user;
 
 import com.railway.booking.command.Command;
-import com.railway.booking.dao.PageProvider;
 import com.railway.booking.entity.Train;
 import com.railway.booking.service.TrainService;
+import com.railway.booking.service.util.Constants;
+import com.railway.booking.service.util.PageProvider;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class TrainCommand implements Command {
-    private static final int TRAIN_PER_PAGE = 5;
-
     private final TrainService trainService;
     private final PageProvider pageProvider;
 
@@ -29,14 +28,11 @@ public class TrainCommand implements Command {
         request.setAttribute("trains", trains);
 
         int size = trainService.count();
-        int totalPages = size / TRAIN_PER_PAGE;
+        int totalPages = pageProvider.getTotalPages(size);
 
-        if (totalPages % TRAIN_PER_PAGE > 0) {
-            totalPages++;
-        }
         request.setAttribute("noOfPages", totalPages);
         request.setAttribute("page", pageNumber);
-        request.setAttribute("recordsPerPage", TRAIN_PER_PAGE);
+        request.setAttribute("recordsPerPage", Constants.ITEM_PER_PAGE);
 
         return "/view/trains.jsp";
     }

@@ -4,7 +4,7 @@ import com.railway.booking.dao.TariffDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.CarriageType;
 import com.railway.booking.entity.Tariff;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.service.validator.TariffValidator;
 import org.junit.After;
 import org.junit.Rule;
@@ -47,14 +47,14 @@ public class TariffServiceImplTest {
     private TariffValidator tariffValidator;
 
     @Mock
-    private Paginator paginator;
+    private PageProvider pageProvider;
 
     @InjectMocks
     private TariffServiceImpl tariffService;
 
     @After
     public void resetMocks() {
-        reset(tariffDao, tariffValidator, paginator);
+        reset(tariffDao, tariffValidator, pageProvider);
     }
 
     @Test
@@ -81,7 +81,7 @@ public class TariffServiceImplTest {
 
     @Test
     public void findAllShouldNotReturnNullIfResultAreAbsent() {
-        when(paginator.getMaxPage(anyInt(), anyInt())).thenReturn(1);
+        when(pageProvider.getMaxPage(anyInt(), anyInt())).thenReturn(1);
         when(tariffDao.findAll(any(Page.class))).thenReturn(Collections.EMPTY_LIST);
 
         final List<Tariff> actual = tariffService.findAll();

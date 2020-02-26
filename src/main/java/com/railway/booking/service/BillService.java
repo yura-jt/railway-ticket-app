@@ -5,6 +5,7 @@ import com.railway.booking.entity.Bill;
 import java.util.List;
 
 public interface BillService {
+    void saveBill(Bill bill);
 
     void payBill(Bill bill);
 

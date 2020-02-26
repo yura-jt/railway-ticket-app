@@ -1,26 +1,30 @@
 package com.railway.booking.service.impl;
 
-import com.railway.booking.dao.CrudDao;
+import com.railway.booking.dao.OrderDao;
 import com.railway.booking.dao.domain.Page;
 import com.railway.booking.entity.Order;
 import com.railway.booking.service.OrderService;
-import com.railway.booking.service.Paginator;
+import com.railway.booking.service.util.Constants;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.service.validator.OrderValidator;
 
 import java.util.List;
 
 public class OrderServiceImpl implements OrderService {
-
-    private static final Integer MAX_ORDER_PER_PAGE = 5;
-    private final CrudDao<Order> orderDao;
+    private final OrderDao orderDao;
     private final OrderValidator orderValidator;
-    private final Paginator paginator;
+    private final PageProvider pageProvider;
 
-    public OrderServiceImpl(CrudDao<Order> orderDao, OrderValidator orderValidator,
-                            Paginator paginator) {
+    public OrderServiceImpl(OrderDao orderDao, OrderValidator orderValidator,
+                            PageProvider pageProvider) {
         this.orderDao = orderDao;
         this.orderValidator = orderValidator;
-        this.paginator = paginator;
+        this.pageProvider = pageProvider;
+    }
+
+    @Override
+    public Integer saveOrder(Order order) {
+        return orderDao.saveOrder(order);
     }
 
     @Override
@@ -36,13 +40,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findAll(int pageNumber) {
-        int maxPage = paginator.getMaxPage(count(), MAX_ORDER_PER_PAGE);
+        int maxPage = pageProvider.getMaxPage(count(), Constants.ITEM_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
             pageNumber = maxPage;
         }
-        return orderDao.findAll(new Page(pageNumber, MAX_ORDER_PER_PAGE));
+        return orderDao.findAll(new Page(pageNumber, Constants.ITEM_PER_PAGE));
     }
 
     @Override

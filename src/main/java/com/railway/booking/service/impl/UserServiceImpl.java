@@ -2,35 +2,36 @@ package com.railway.booking.service.impl;
 
 import com.railway.booking.dao.UserDao;
 import com.railway.booking.dao.domain.Page;
+import com.railway.booking.dao.exception.DatabaseSqlRuntimeException;
 import com.railway.booking.entity.User;
-import com.railway.booking.service.Paginator;
-import com.railway.booking.service.PasswordEncryptor;
+import com.railway.booking.service.util.Constants;
+import com.railway.booking.service.util.PageProvider;
+import com.railway.booking.service.util.PasswordEncryptor;
 import com.railway.booking.service.UserService;
 import com.railway.booking.service.validator.UserValidator;
 import com.railway.booking.service.validator.ValidateException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
-    private static final int USER_PER_PAGE = 5;
-
     private final PasswordEncryptor passwordEncryptor;
     private final UserDao userDao;
     private final UserValidator userValidator;
-    private final Paginator paginator;
+    private final PageProvider pageProvider;
 
 
     public UserServiceImpl(UserDao userDao, UserValidator userValidator, PasswordEncryptor passwordEncryptor,
-                           Paginator paginator) {
+                           PageProvider pageProvider) {
         this.userDao = userDao;
         this.userValidator = userValidator;
         this.passwordEncryptor = passwordEncryptor;
-        this.paginator = paginator;
+        this.pageProvider = pageProvider;
     }
 
     @Override
@@ -68,13 +69,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll(int pageNumber) {
-        int maxPage = paginator.getMaxPage((int) userDao.count(), USER_PER_PAGE);
+        int maxPage = pageProvider.getMaxPage((int) userDao.count(), Constants.ITEM_PER_PAGE);
         if (pageNumber <= 0) {
             pageNumber = 1;
         } else if (pageNumber >= maxPage) {
             pageNumber = maxPage;
         }
-        List<User> users = userDao.findAll(new Page(pageNumber, USER_PER_PAGE));
+        List<User> users = userDao.findAll(new Page(pageNumber, Constants.ITEM_PER_PAGE));
 
         return users != null ? users : Collections.emptyList();
     }
@@ -83,6 +84,23 @@ public class UserServiceImpl implements UserService {
     public User findById(Integer id) {
         userValidator.validateId(id);
         return userDao.findById(id).orElse(null);
+    }
+
+    @Override
+    public Integer count() {
+        return (int) userDao.count();
+    }
+
+    @Override
+    public boolean deleteUserById(Integer userId) {
+        userValidator.validateId(userId);
+        try {
+            userDao.deleteUserById(userId);
+            return true;
+        } catch (DatabaseSqlRuntimeException e) {
+            LOGGER.error(String.format("Couldn't delete user with id = %s", userId), e);
+        }
+        return false;
     }
 
     private boolean isValidCredentials(String email, String password) {

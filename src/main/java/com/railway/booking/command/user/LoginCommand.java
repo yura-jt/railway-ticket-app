@@ -44,6 +44,7 @@ public class LoginCommand implements Command {
 
     private void setUserAndRoleToSession(HttpServletRequest request, User user) {
         HttpSession session = request.getSession();
+        session.setAttribute("userId", user.getId());
         session.setAttribute("userFirstName", user.getFirstName());
         session.setAttribute("role", user.getRoleType());
     }

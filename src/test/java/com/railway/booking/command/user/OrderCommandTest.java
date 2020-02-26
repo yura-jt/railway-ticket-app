@@ -1,6 +1,6 @@
 package com.railway.booking.command.user;
 
-import com.railway.booking.dao.PageProvider;
+import com.railway.booking.service.util.PageProvider;
 import com.railway.booking.entity.Order;
 import com.railway.booking.service.OrderService;
 import org.junit.After;
@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
@@ -72,6 +73,7 @@ public class OrderCommandTest {
         when(request.getParameter(PARAM)).thenReturn(STRING_PAGE);
         when(pageProvider.getPageNumberFromString(any())).thenReturn(PAGE_NUMBER);
         when(orderService.findAll(PAGE_NUMBER)).thenReturn(TRAINS);
+        when(pageProvider.getTotalPages(anyInt())).thenReturn(3);
         when(orderService.count()).thenReturn(COUNT);
 
         String actual = orderCommand.execute(request, response);

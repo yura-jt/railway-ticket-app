@@ -22,7 +22,7 @@ public class TariffDaoImpl extends AbstractCrudDaoImpl<Tariff> implements Tariff
 
     @Override
     public Optional<Tariff> getTariffByCarriageType(CarriageType carriageType) {
-        return findByParam(carriageType, FIND_BY_CARRIAGE_TYPE_QUERY);
+        return findByParam(carriageType.toString(), FIND_BY_CARRIAGE_TYPE_QUERY);
     }
 
     public TariffDaoImpl(DatabaseConnector connector) {

@@ -37,6 +37,11 @@ public class FrontController extends HttpServlet {
         Command command = commandProvider.getCommand(request.getRequestURI());
         String page = command.execute(request, response);
 
+        if (page.contains("redirect:")) {
+            response.sendRedirect(request.getContextPath() +page.replaceAll("redirect:",""));
+            return;
+        }
+
         request.getRequestDispatcher(page).forward(request, response);
     }
 }
